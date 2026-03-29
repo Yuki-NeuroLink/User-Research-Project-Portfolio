@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Name — UX Researcher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F2EC;
+    --ink: #1A1714;
+    --ink-muted: #6B6560;
+    --ink-faint: #B5B0AA;
+    --accent: rgb(37, 150, 190);
+    --accent-light: rgb(220, 241, 249);
+    --white: #FFFFFF;
+    --border: rgba(26,23,20,0.12);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 3rem;
+    background: rgba(245,242,236,0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 3rem 4rem;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-text { }
+
+  .hero-eyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    max-width: 42ch;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--accent); }
+
+  .btn-ghost {
+    color: var(--ink);
+    font-size: 0.85rem;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+
+  .hero-visual {
+    position: relative;
+  }
+
+  .hero-card-stack {
+    position: relative;
+    height: 480px;
+  }
+
+  .stack-card {
+    position: absolute;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .stack-card:nth-child(1) {
+    width: 85%;
+    top: 40px;
+    left: 5%;
+    transform: rotate(-3deg);
+    background: var(--accent-light);
+  }
+
+  .stack-card:nth-child(2) {
+    width: 88%;
+    top: 60px;
+    left: 2%;
+    transform: rotate(1.5deg);
+    background: #EAE6DE;
+  }
+
+  .stack-card:nth-child(3) {
+    width: 92%;
+    top: 80px;
+    left: 0;
+    transform: rotate(0);
+    background: var(--white);
+    z-index: 2;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .card-meta {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    margin-bottom: 1rem;
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--ink-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .tag-accent {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
+  }
+
+  .card-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1rem 0;
+  }
+
+  .card-insight {
+    font-size: 0.9rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .card-quote-mark {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    line-height: 0.5;
+    color: var(--accent-light);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* SKILLS STRIP */
+  .skills-strip {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 3rem;
+    background: var(--white);
+    overflow: hidden;
+  }
+
+  .skills-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .skills-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .skills-list {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    list-style: none;
+  }
+
+  .skills-list li {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+
+  /* WORK SECTION */
+  .section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .section-count {
+    font-size: 0.8rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+  }
+
+  /* PROJECT GRID */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .project-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .project-thumb {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card.featured .project-thumb {
+    height: auto;
+    min-height: 280px;
+  }
+
+  .thumb-1 { background: #E8E0F0; }
+  .thumb-2 { background: var(--accent-light); }
+  .thumb-3 { background: #D6E8E0; }
+  .thumb-4 { background: #E0E8F0; }
+
+  .thumb-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.15;
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--ink) 0,
+      var(--ink) 1px,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 16px 16px;
+  }
+
+  .thumb-icon {
+    position: relative;
+    z-index: 1;
+    width: 56px;
+    height: 56px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .project-body {
+    padding: 1.5rem;
+  }
+
+  .project-number {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+  }
+
+  .project-card.featured .project-title {
+    font-size: 1.8rem;
+  }
+
+  .project-summary {
+    font-size: 0.88rem;
+    color: var(--ink-muted);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+
+  .project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-methods {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .project-arrow {
+    font-size: 1.2rem;
+    color: var(--ink-faint);
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover .project-arrow {
+    color: var(--accent);
+    transform: translate(3px, -3px);
+  }
+
+  /* ABOUT STRIP */
+  .about-strip {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 5rem 3rem;
+  }
+
+  .about-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .about-heading {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+
+  .about-heading em {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    color: rgba(245,242,236,0.65);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 2.2rem;
+    color: var(--cream);
+    display: block;
+    letter-spacing: -0.03em;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: rgba(245,242,236,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.25rem;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-name {
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--ink);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+    .hero-visual { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-template-columns: 1fr; }
+    .about-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .section { padding: 4rem 1.5rem; }
+    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Your Name</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="mailto:you@email.com">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">UX Researcher</p>
+    <h1>Turning<br><em>messy questions</em><br>into clear direction.</h1>
+    <p class="hero-bio">I help product teams understand the people they're building for — through interviews, usability studies, and rigorous synthesis that actually moves things forward.</p>
+    <div class="hero-cta">
+      <a href="#work" class="btn-primary">View projects</a>
+      <a href="about.html" class="btn-ghost">About me →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="stack-card"></div>
+      <div class="stack-card"></div>
+      <div class="stack-card">
+        <p class="card-label">Key insight — Project 01</p>
+        <p class="card-title">Checkout abandonment study</p>
+        <p class="card-meta">Moderated usability test · 12 participants</p>
+        <div class="card-tags">
+          <span class="tag tag-accent">Usability testing</span>
+          <span class="tag">Think-aloud</span>
+          <span class="tag">E-commerce</span>
+        </div>
+        <div class="card-divider"></div>
+        <span class="card-quote-mark">"</span>
+        <p class="card-insight">I just don't know what's going to happen after I click pay. There's no reassurance anywhere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS STRIP -->
+<div class="skills-strip">
+  <div class="skills-inner">
+    <span class="skills-label">Methods</span>
+    <ul class="skills-list">
+      <li>User interviews</li>
+      <li>Usability testing</li>
+      <li>Survey design</li>
+      <li>Diary studies</li>
+      <li>Card sorting</li>
+      <li>Tree testing</li>
+      <li>Thematic analysis</li>
+      <li>Jobs to be done</li>
+    </ul>
+  </div>
+</div>
+
+<!-- WORK -->
+<section class="section" id="work">
+  <div class="section-header">
+    <h2>Selected projects</h2>
+    <span class="section-count">04 case studies</span>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- Featured project -->
+    <a href="case-study.html" class="project-card featured">
+      <div class="project-thumb thumb-1">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-icon">🔍</div>
+      </div>
+      <div class="project-body">
+        <p class="project-number">01 — Featured</p>
+        <h3 class="project-title">Why users abandon checkout — and what to do about it</h3>
+        <p class="project-summary">A moderated usability study with 12 participants that uncovered five critical trust gaps in a retail checkout flow. Findings directly shaped a redesign that reduced abandonment by 28%.</p>
+        <div class="project-footer">
+          <div class="project-methods">
+            <span class="tag">Usability testing</span>
+            <span class="tag">Think-aloud</span>
+            <span class="tag">Affinity mapping</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Project 2 -->
+    <a href="#" class="project-card">
+      <div class="project-thumb thumb-2">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-icon">💬</div>
+      </div>
+      <div class="project-body">
+        <p class="project-number">02</p>
+        <h3 class="project-title">Understanding how GPs make referral decisions</h3>
+        <p class="project-summary">Foundational research across 18 GP interviews to map the mental models and friction points behind specialist referrals in the NHS.</p>
+        <div class="project-footer">
+          <div class="project-methods">
+            <span class="tag">Interviews</span>
+            <span class="tag">JTBD</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Project 3 -->
+    <a href="#" class="project-card">
+      <div class="project-thumb thumb-3">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-icon">📋</div>
+      </div>
+      <div class="project-body">
+        <p class="project-number">03</p>
+        <h3 class="project-title">Onboarding drop-off in a B2B SaaS product</h3>
+        <p class="project-summary">Mixed-methods study combining analytics review and user interviews to identify where and why new users failed to reach activation.</p>
+        <div class="project-footer">
+          <div class="project-methods">
+            <span class="tag">Mixed methods</span>
+            <span class="tag">Analytics</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Project 4 -->
+    <a href="#" class="project-card">
+      <div class="project-thumb thumb-4">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-icon">📊</div>
+      </div>
+      <div class="project-body">
+        <p class="project-number">04</p>
+        <h3 class="project-title">Navigation redesign — validating a new IA</h3>
+        <p class="project-summary">Tree testing and first-click studies across 200 participants to validate a proposed information architecture before committing to a full redesign.</p>
+        <div class="project-footer">
+          <div class="project-methods">
+            <span class="tag">Tree testing</span>
+            <span class="tag">Card sorting</span>
+          </div>
+          <span class="project-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div class="about-strip" id="about">
+  <div class="about-inner">
+    <div>
+      <h2 class="about-heading">Research that <em>earns its seat</em> at the table.</h2>
+    </div>
+    <div>
+      <p class="about-text">I'm a UX researcher with 5+ years working across e-commerce, healthcare, and B2B SaaS. My work sits at the intersection of rigorous method and practical impact — I care as much about how insights land with stakeholders as I do about collecting them.</p>
+      <p class="about-text">Previously at Studio X, Agency Y, and a health-tech startup. Based in London, available for freelance and contract work.</p>
+      <div class="about-stats">
+        <div>
+          <span class="stat-number">40+</span>
+          <span class="stat-label">Projects</span>
+        </div>
+        <div>
+          <span class="stat-number">5 yrs</span>
+          <span class="stat-label">Experience</span>
+        </div>
+        <div>
+          <span class="stat-number">8</span>
+          <span class="stat-label">Methods used</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="footer-name">Your Name</span>
+  <ul class="footer-links">
+    <li><a href="mailto:you@email.com">Email</a></li>
+    <li><a href="#">LinkedIn</a></li>
+    <li><a href="#">Read.cv</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
