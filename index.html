@@ -18,6 +18,8 @@
       --text:     #1a1a1a;
       --muted:    #6b6860;
       --accent:   #2596be;
+      --tag-bg:   #e6e2db;
+      --max-w:    780px;
       --nav-h:    64px;
     }
 
@@ -58,11 +60,11 @@
       list-style: none;
       display: flex;
       gap: 2rem;
-      align-items: center;
     }
 
     nav ul a {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.82rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
@@ -70,17 +72,18 @@
       transition: color 0.2s;
     }
 
-    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
     nav ul a:hover { color: var(--text); }
 
     /* ── Sections ── */
     section {
       padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 5rem;
-      max-width: calc(780px + 6rem);
+      max-width: calc(var(--max-w) + 6rem);
       margin: 0 auto;
     }
 
-    section:not(:first-of-type) { padding-top: 5rem; }
+    section:not(:first-of-type) {
+      padding-top: 5rem;
+    }
 
     /* ── Hero ── */
     #hero {
@@ -92,22 +95,49 @@
       padding-bottom: 3rem;
     }
 
+    #hero .eyebrow {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.4rem;
+    }
+
     #hero h1 {
       font-size: clamp(3.2rem, 8vw, 5.8rem);
       font-weight: 900;
       line-height: 1.08;
       letter-spacing: -0.02em;
-      margin-bottom: 2.8rem;
-      font-family: 'Playfair Display', serif;
+      margin-bottom: 1.6rem;
+      max-width: 12ch;
+      font-family: 'Playfair Display', 'Georgia', serif;
     }
 
-    #hero h1 .line  { display: block; }
-    #hero h1 .impact { color: var(--accent); font-style: italic; }
+    #hero h1 .line {
+      display: block;
+    }
+
+    #hero h1 .impact {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    #hero .tagline {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 44ch;
+      line-height: 1.65;
+      margin-bottom: 2.8rem;
+      font-weight: 400;
+    }
 
     .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     .btn {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 0.82rem;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -116,18 +146,26 @@
       border-radius: 2px;
       transition: all 0.2s;
       display: inline-block;
-      cursor: pointer;
-      border: none;
     }
 
-    .btn-primary  { background: var(--text); color: #fff; }
-    .btn-primary:hover  { background: var(--accent); }
-    .btn-secondary { border: 1px solid var(--border); color: var(--text); background: transparent; }
+    .btn-primary {
+      background: var(--text);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--accent); }
+
+    .btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+
     .btn-secondary:hover { border-color: var(--muted); }
 
-    /* ── Section label ── */
+    /* ── Section titles ── */
     .section-label {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 0.75rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -145,26 +183,154 @@
       background: var(--border);
     }
 
-    /* ══════════════════════════════════════
-       CONTACT
-    ══════════════════════════════════════ */
-    #contact { padding-bottom: 8rem; }
+    /* ── About ── */
+    #about .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    #about p {
+      font-size: 1.08rem;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+
+    #about .sidebar {
+      border-left: 1px solid var(--border);
+      padding-left: 2rem;
+    }
+
+    #about .sidebar h3 {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      margin-top: 1.8rem;
+    }
+
+    #about .sidebar h3:first-child { margin-top: 0; }
+
+    #about .sidebar p, #about .sidebar li {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    #about .sidebar ul { list-style: none; }
+
+    #about .sidebar ul li::before {
+      content: '—';
+      margin-right: 0.5rem;
+      color: var(--muted);
+    }
+
+    /* ── Projects ── */
+    #projects .grid {
+      display: grid;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .project-card {
+      background: var(--surface);
+      padding: 2rem 2.2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .project-card:hover { background: var(--tag-bg); }
+
+    .project-card .meta {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .project-card h3 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .project-card p {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 55ch;
+    }
+
+    .project-card .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+    }
+
+    .tag {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--tag-bg);
+      color: var(--muted);
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .project-card:hover .tag { background: var(--border); }
+
+    .project-arrow {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover .project-arrow {
+      opacity: 1;
+      transform: translateX(3px);
+    }
+
+    /* ── Contact ── */
+    #contact {
+      padding-bottom: 8rem;
+    }
 
     #contact .intro {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.05rem;
+      font-size: 1.08rem;
       color: var(--muted);
       max-width: 48ch;
       margin-bottom: 3rem;
       line-height: 1.7;
     }
 
-    .contact-form { max-width: 520px; }
-    .form-group   { margin-bottom: 1.4rem; }
+    .contact-form {
+      max-width: 520px;
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
 
     label {
       display: block;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 0.75rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -175,7 +341,7 @@
     input, textarea {
       width: 100%;
       padding: 0.8rem 1rem;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Georgia', serif;
       font-size: 0.95rem;
       color: var(--text);
       background: var(--surface);
@@ -186,22 +352,73 @@
       resize: vertical;
     }
 
-    input:focus, textarea:focus { border-color: var(--accent); }
+    input:focus, textarea:focus {
+      border-color: var(--muted);
+    }
+
     textarea { min-height: 130px; }
-    .form-submit { margin-top: 1.8rem; }
+
+    .form-submit {
+      margin-top: 1.8rem;
+    }
+
+    .form-links {
+      margin-top: 3rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .form-links a {
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .form-links a:hover { color: var(--text); }
 
     /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
       padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     footer p {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
       font-size: 0.78rem;
       color: var(--muted);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      #about .content {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      #about .sidebar {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding-left: 0;
+        padding-top: 2rem;
+      }
+      .project-card {
+        grid-template-columns: 1fr;
+      }
+      .project-arrow { display: none; }
     }
   </style>
 </head>
@@ -209,34 +426,181 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="index.html" class="logo">Yuki Wang</a>
+    <a href="#hero" class="logo">Yuki Wang</a>
     <ul>
-      <li><a href="about.html"   class="nav-small">About Me</a></li>
-      <li><a href="work.html"    class="nav-small">Work</a></li>
-      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
-      <li><a href="contact.html" class="nav-small">Contact</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 
   <!-- Hero -->
   <section id="hero">
+    <p class="eyebrow">Writer &amp; Content Creator</p>
     <h1>
       <span class="line">Research.</span>
       <span class="line">Design.</span>
       <span class="line impact">Impact.</span>
     </h1>
+    <p class="tagline">I craft stories, essays, and content that connect with readers and bring ideas to life.</p>
     <div class="btn-group">
-      <a href="work.html" class="btn btn-primary">View My Work</a>
-      <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="#contact" class="btn btn-secondary">Get in Touch</a>
     </div>
   </section>
 
+  <!-- About -->
+  <section id="about">
+    <p class="section-label">About Me</p>
+    <div class="content">
+      <div class="bio">
+        <p>Hi, I'm Yuki — a writer focused on creative nonfiction, digital content, and storytelling that matters. I believe good writing isn't just about grammar and structure; it's about finding the right voice for the right moment.</p>
+        <p>I've worked across editorial, brand, and personal creative projects, exploring everything from long-form essays to sharp, concise web copy. Whatever the format, I bring curiosity and care to every piece.</p>
+        <p>When I'm not writing, you'll find me reading widely, taking long walks, and collecting ideas for the next thing.</p>
+      </div>
+      <div class="sidebar">
+        <h3>What I Do</h3>
+        <ul>
+          <li>Long-form essays &amp; articles</li>
+          <li>Brand &amp; web copywriting</li>
+          <li>Content strategy</li>
+          <li>Creative nonfiction</li>
+          <li>Editing &amp; proofreading</li>
+        </ul>
+        <h3>Currently</h3>
+        <p>Open to freelance collaborations and editorial projects. Always happy to talk about ideas.</p>
+        <h3>Based in</h3>
+        <p>Available worldwide — let's work together.</p>
+      </div>
+    </div>
+  </section>
 
+  <!-- Projects -->
+  <section id="projects">
+    <p class="section-label">Selected Work</p>
+    <div class="grid">
+
+      <div class="project-card">
+        <div>
+          <p class="meta">Essay · 2025</p>
+          <h3>The Quiet Hours</h3>
+          <p>A personal essay exploring how silence shapes creativity — and why the most productive moments are often the ones we can't see.</p>
+          <div class="tags">
+            <span class="tag">Creative Nonfiction</span>
+            <span class="tag">Personal Essay</span>
+          </div>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <p class="meta">Brand Copy · 2025</p>
+          <h3>Voice &amp; Tone Guide — Studio Ember</h3>
+          <p>Developed a comprehensive voice and tone guide for a design studio, helping their team write consistently across every channel.</p>
+          <div class="tags">
+            <span class="tag">Copywriting</span>
+            <span class="tag">Brand Strategy</span>
+          </div>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <p class="meta">Article Series · 2024</p>
+          <h3>Future of Work — 6-Part Series</h3>
+          <p>A research-backed editorial series examining how remote culture, automation, and community are reshaping the modern workplace.</p>
+          <div class="tags">
+            <span class="tag">Editorial</span>
+            <span class="tag">Research</span>
+            <span class="tag">Long-form</span>
+          </div>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+      <div class="project-card">
+        <div>
+          <p class="meta">Content Strategy · 2024</p>
+          <h3>Revamped Content Pillar — Tech Startup</h3>
+          <p>Restructured a startup's blog strategy from scratch, defining content pillars, tone, and a 6-month editorial calendar that tripled organic reach.</p>
+          <div class="tags">
+            <span class="tag">Content Strategy</span>
+            <span class="tag">SEO</span>
+          </div>
+        </div>
+        <span class="project-arrow">→</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <p class="section-label">Contact</p>
+    <p class="intro">Have a project in mind, or just want to say hello? I'd love to hear from you. Fill in the form below or reach out directly.</p>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required />
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell me about your project…" required></textarea>
+      </div>
+      <div class="form-submit">
+        <button type="submit" class="btn btn-primary">Send Message →</button>
+      </div>
+      <p id="form-success" style="display:none; font-family:'Helvetica Neue',sans-serif; font-size:0.9rem; color:#555; margin-top:1rem;">
+        Thanks for reaching out! I'll get back to you soon.
+      </p>
+    </form>
+
+    <div class="form-links">
+      <a href="mailto:hello@yukiwang.com">✉ hello@yukiwang.com</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">↗ LinkedIn</a>
+      <a href="https://twitter.com" target="_blank" rel="noopener">↗ Twitter / X</a>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer>
     <p>© 2026 Yuki Wang. All rights reserved.</p>
+    <p>Designed with intention.</p>
   </footer>
+
+  <script>
+    // Smooth active nav link highlight on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav ul a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + entry.target.id
+              ? 'var(--text)'
+              : '';
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Simple form feedback
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('form-success').style.display = 'block';
+      e.target.reset();
+    }
+  </script>
 
 </body>
 </html>
