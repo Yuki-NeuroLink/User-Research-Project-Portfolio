@@ -3,72 +3,315 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UX Research & Design — Yuki Wang</title>
+  <title>work-ux — Yuki Wang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #f0ede6; --surface: #ece9e2; --border: #d8d4ca;
-      --text: #1a1a1a; --muted: #6b6860; --accent: #2596be; --nav-h: 64px;
+      --bg:       #f0ede6;
+      --surface:  #ece9e2;
+      --border:   #d8d4ca;
+      --text:     #1a1a1a;
+      --muted:    #6b6860;
+      --accent:   #2596be;
+      --nav-h:    64px;
     }
-    html, body { height: 100%; }
-    body { font-family: 'Playfair Display', 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Playfair Display', 'Georgia', serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
     nav {
-      position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
-      background: rgba(240,237,230,0.94); backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border); z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240, 237, 230, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0 clamp(1.5rem, 5vw, 3rem);
     }
-    nav .logo { font-size: 1.05rem; font-weight: 700; font-family: 'Playfair Display', serif; color: var(--text); text-decoration: none; }
-    nav ul { list-style: none; display: flex; gap: 2rem; align-items: center; }
-    nav ul a { font-family: 'Inter', sans-serif; font-size: 0.70rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+
+    nav .logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
     nav ul a:hover, nav ul a.active { color: var(--text); }
-    .coming-soon {
-      min-height: 100vh; display: flex; flex-direction: column;
-      align-items: flex-start; justify-content: center;
-      padding: calc(var(--nav-h) + 3rem) clamp(1.5rem, 5vw, 3rem) 3rem;
-      max-width: calc(780px + 6rem); margin: 0 auto;
+
+    .page-content {
+      padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 7rem;
+      max-width: calc(1120px + 6rem);
+      margin: 0 auto;
     }
-    .breadcrumb {
-      font-family: 'Inter', sans-serif; font-size: 0.72rem; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 3rem;
-      display: flex; align-items: center; gap: 0.6rem;
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
-    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .breadcrumb a:hover { color: var(--text); }
-    .breadcrumb .sep { opacity: 0.4; }
-    .eyebrow {
-      font-family: 'Inter', sans-serif; font-size: 0.75rem; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: 1rem;
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
     }
-    .eyebrow::after { content: ''; width: 48px; height: 1px; background: var(--border); }
-    h1 { font-size: clamp(2.8rem, 7vw, 5rem); font-weight: 900; line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
-    h1 em { color: var(--accent); font-style: italic; }
-    .sub { font-family: 'Inter', sans-serif; font-size: 1rem; color: var(--muted); max-width: 42ch; line-height: 1.75; }
-    footer { border-top: 1px solid var(--border); padding: 1.8rem clamp(1.5rem, 5vw, 3rem); display: flex; justify-content: center; }
-    footer p { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--muted); }
+
+    .hero {
+      margin-bottom: 3.25rem;
+      max-width: 760px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      font-weight: 900;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: #faf7f1;
+      border: 1px solid #e3ddd2;
+      border-left: 4px solid transparent;
+      border-radius: 16px;
+      padding: 1.75rem;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, border-left-color 0.22s ease, background 0.22s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(26, 26, 26, 0.05);
+      border-color: #d9d1c4;
+      border-left-color: var(--accent);
+      background: #fcf9f4;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .card-tag, .card-status {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .card-tag { color: var(--accent); }
+    .card-status { color: var(--muted); }
+
+    .card-title {
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      line-height: 1.18;
+      font-weight: 900;
+      margin-bottom: 0.9rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 36ch;
+    }
+
+    .card-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 1.75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .chip {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text);
+      border: 1px solid #ddd6ca;
+      padding: 0.35rem 0.6rem;
+      background: #f3efe8;
+      border-radius: 999px;
+    }
+
+    .card-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-link::after {
+      content: '→';
+      transition: transform 0.2s ease;
+    }
+
+    .project-card:hover .card-link::after {
+      transform: translateX(4px);
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      justify-content: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      nav ul { gap: 1.1rem; }
+      .project-card { min-height: 260px; padding: 1.4rem; }
+    }
   </style>
 </head>
 <body>
+
   <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
     <ul>
-      <li><a href="about.html">About Me</a></li>
-      <li><a href="work.html" class="active">Work</a></li>
-      <li><a href="design.html">Design Studio</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="about.html"   class="nav-small">About Me</a></li>
+      <li><a href="work.html"    class="nav-small active">Work</a></li>
+      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
+      <li><a href="contact.html" class="nav-small">Contact</a></li>
     </ul>
   </nav>
-  <div class="coming-soon">
-    <p class="breadcrumb"><a href="work.html">Work</a><span class="sep">/</span>UX Research & Design</p>
-    <p class="eyebrow">End-to-end</p>
-    <h1>Coming<br><em>Soon.</em></h1>
-    <p class="sub">UX research and design projects — from discovery through to interface design — being documented here shortly.</p>
+
+  <div class="page-content">
+    <p class="section-label">UX Research &amp; Design</p>
+
+    <section class="hero">
+      <h1>Selected <em>UX research</em><br>projects.</h1>
+    </section>
+
+    <section class="cards-grid">
+
+      <!-- Card 1: Mental Health Screening -->
+      <a href="work-ux-mental_health_case_study.html" class="project-card">
+        <div class="card-top">
+          <div class="card-meta">
+            <span class="card-tag">UX Research &amp; Design</span>
+            <span class="card-status">Featured project</span>
+          </div>
+          <h2 class="card-title">Adolescent Mental Health Survey Design</h2>
+          <p class="card-desc">
+            Designing a large-scale adolescent survey experience with age-appropriate wording, input formats, and clearer measurement for school-based mental health screening.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-details">
+            <span class="chip">Survey design</span>
+            <span class="chip">Usability testing</span>
+            <span class="chip">Adolescents</span>
+            <span class="chip">End-to-end delivery</span>
+          </div>
+          <span class="card-link">View project</span>
+        </div>
+      </a>
+
+      <!-- Card 2: MATLAB App -->
+      <a href="work-ux-matlab_case_study.html" class="project-card">
+        <div class="card-top">
+          <div class="card-meta">
+            <span class="card-tag">UX + System Design</span>
+            <span class="card-status">Featured project</span>
+          </div>
+          <h2 class="card-title">MATLAB App for Behavioural Experiments</h2>
+          <p class="card-desc">
+            Designing a touch-based experimental platform to run controlled one-hour studies — integrating audio and video stimuli, survey questions, countdown timing, and automated data logging.
+          </p>
+        </div>
+        <div class="card-bottom">
+          <div class="card-details">
+            <span class="chip">App design</span>
+            <span class="chip">System design</span>
+            <span class="chip">Journey mapping</span>
+            <span class="chip">Observational testing</span>
+          </div>
+          <span class="card-link">View project</span>
+        </div>
+      </a>
+
+    </section>
   </div>
-  <footer><p>© 2026 Yuki Wang. All rights reserved.</p></footer>
+
+  <footer>
+    <p>© 2026 Yuki Wang. All rights reserved.</p>
+  </footer>
+
 </body>
 </html>

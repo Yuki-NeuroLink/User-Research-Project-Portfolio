@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mental Health Screening Survey for Adolescents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f2ec;
+      --surface: #ece9e2;
+      --surface-2: #f7f4ee;
+      --border: #d8d4ca;
+      --text: #1a1a1a;
+      --muted: #6b6860;
+      --accent: #2596be;
+      --accent-soft: #d9eef7;
+      --accent-deep: #1778a0;
+      --nav-h: 64px;
+      --shadow: 0 10px 30px rgba(26, 26, 26, 0.04);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --toc-w: 230px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Playfair Display', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240, 237, 230, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    nav .logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
+    nav ul a:hover, nav ul a.active { color: var(--text); }
+
+    nav ul a:hover, nav ul a.active { color: var(--text); }
+
+    .page-shell {
+      max-width: calc(1320px + 6rem);
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 4.5rem) clamp(1.5rem, 5vw, 3rem) 7rem;
+      display: grid;
+      grid-template-columns: var(--toc-w) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      align-self: start;
+      padding-top: 0.3rem;
+    }
+
+    .toc-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      border-left: 1px solid var(--border);
+      padding-left: 0;
+    }
+
+    .toc-list a {
+      display: block;
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: #a3a097;
+      text-decoration: none;
+      transition: color 0.22s ease, transform 0.22s ease;
+    }
+
+    .toc-list a::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0.45rem;
+      bottom: 0.45rem;
+      width: 2px;
+      background: transparent;
+      transition: background 0.22s ease, width 0.22s ease;
+    }
+
+    .toc-list a:hover,
+    .toc-list a.active {
+      color: var(--text);
+      transform: translateX(3px);
+    }
+
+    .toc-list a:hover::before,
+    .toc-list a.active::before {
+      background: var(--accent);
+      width: 3px;
+    }
+
+    .page-content {
+      min-width: 0;
+    }
+
+    .page-content > section {
+      margin-bottom: 8rem;
+    }
+
+    .page-content > section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 2rem;
+      align-items: end;
+      margin-bottom: 4rem;
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 1.12;
+      margin-bottom: 1rem;
+      max-width: 12ch;
+    }
+
+    .hero-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 58ch;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .card:hover {
+      background: #fbfaf6;
+      border-color: rgba(37, 150, 190, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
+    }
+
+    .at-a-glance {
+      padding: 1.5rem;
+    }
+
+    .card-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      position: relative;
+      padding-top: 0.8rem;
+      transition: color 0.25s ease;
+    }
+
+    .card-label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      transition: background 0.25s ease, width 0.25s ease;
+    }
+
+    section:hover .card-label {
+      color: var(--accent);
+    }
+
+    section:hover .card-label::before {
+      background: var(--accent);
+      width: 60px;
+    }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 1.2rem;
+    }
+
+    .fact-k {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 0.15rem;
+    }
+
+    .fact-v {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.96rem;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .problem-grid,
+    .impact-grid,
+    .decision-grid,
+    .insight-grid,
+    .what-grid,
+    .challenge-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .problem-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 8rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .challenge-grid { grid-template-columns: 0.92fr 1.08fr; margin-bottom: 8rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .insight-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 8rem; }
+    .decision-grid { grid-template-columns: 0.82fr 1.18fr; margin-bottom: 8rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .impact-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .mini-card,
+    .what-card,
+    .insight-card,
+    .impact-item,
+    .decision-block,
+    .method-card,
+    .before-after-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      position: relative;
+    }
+
+    .mini-card:hover,
+    .what-card:hover,
+    .insight-card:hover,
+    .impact-item:hover,
+    .method-card:hover,
+    .before-after-card:hover {
+      border-color: rgba(37, 150, 190, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
+      background: #fbfaf6;
+    }
+
+    .mini-card::before,
+    .what-card::before,
+    .insight-card::before,
+    .impact-item::before,
+    .method-card::before,
+    .before-after-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 0;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.22s ease, opacity 0.22s ease;
+      opacity: 0;
+    }
+
+    .mini-card:hover::before,
+    .what-card:hover::before,
+    .insight-card:hover::before,
+    .impact-item:hover::before,
+    .method-card:hover::before,
+    .before-after-card:hover::before {
+      width: 3px;
+      opacity: 1;
+    }
+
+    .mini-card {
+      padding: 1.2rem 1.4rem 1.2rem 1.55rem;
+    }
+
+    .mini-bar { display: none; }
+
+    .mini-card p:not(.decision-label),
+    .body-copy,
+    .what-card p:not(.decision-label),
+    .insight-card p,
+    .before-after-card p:not(.decision-label):not(.ba-label),
+    .method-card p:not(.decision-label),
+    .impact-item p,
+    .reflection p,
+    .bullet-list li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .section-heading {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.2;
+      margin: 0.4rem 0 1rem;
+      letter-spacing: -0.005em;
+    }
+
+    .body-copy {
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 58ch;
+    }
+
+    .facts-grid > div {
+      padding: 0.4rem 0.5rem;
+      border-radius: 8px;
+    }
+
+    .methods-wrap,
+    .synthesis-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .method-card {
+      padding: 1.1rem 1.2rem 1.1rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .method-card .decision-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.02rem;
+      letter-spacing: 0;
+      text-transform: none;
+      color: var(--text);
+      font-weight: 700;
+      background: none !important;
+      padding: 0;
+      border-radius: 0;
+      margin-bottom: 0.3rem;
+    }
+
+    .method-card:hover .decision-label {
+      background: none !important;
+      color: var(--text);
+    }
+
+    .method-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .method-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .what-panel {
+      padding: 1.6rem;
+    }
+
+    .what-grid {
+      margin-top: 1rem;
+    }
+
+    .what-card {
+      padding: 1.2rem 1.25rem 1.2rem 1.4rem;
+    }
+
+    .what-title,
+    .insight-title,
+    .decision-title,
+    .impact-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+    }
+
+    .what-title {
+      font-size: 1.18rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .insight-card {
+      padding: 1.5rem 1.5rem 1.5rem 1.65rem;
+      min-height: 180px;
+    }
+
+    .insight-title {
+      font-size: 1.28rem;
+      line-height: 1.25;
+      margin-bottom: 0.45rem;
+    }
+
+    .decision-wrap {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .before-after-card {
+      padding: 1.3rem 1.3rem 1.3rem 1.45rem;
+    }
+
+    .decision-label {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b6860;
+      font-weight: 600;
+      margin-bottom: 0.9rem;
+      padding: 0.22rem 0.65rem;
+      background: #e8e4db;
+      border: none;
+      border-radius: 8px;
+      cursor: default;
+      transition: color 0.22s ease, background 0.22s ease;
+    }
+
+    .before-after-card:hover .decision-label,
+    .method-card:hover .decision-label {
+      color: var(--text);
+      background: #dedad1;
+    }
+
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+    }
+
+    .ba-box {
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .before-box { background: #f3efe8; }
+    .after-box  { background: #eaf4f8; border-color: #d2e6ef; }
+
+    .ba-label {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .after-box .ba-label { color: var(--accent-deep); }
+
+    .ba-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .bullet-list {
+      list-style: none;
+      margin-top: 0.5rem;
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .bullet-list li::before {
+      content: '•';
+      color: var(--muted);
+      margin-right: 0.55rem;
+    }
+
+    .impact-section {
+      color: var(--text);
+      background: #F8DEC9;
+      color: white;
+      border-radius: 30px;
+      padding: 2rem;
+      margin-bottom: 8rem;
+      border: none;
+      box-shadow: var(--shadow);
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .impact-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .impact-section .card-label,
+    .impact-section h2.section-heading,
+    .impact-item .impact-title {
+      color: var(--text);
+    }
+
+    .impact-section .body-copy {
+      color: var(--muted);
+      max-width: 48ch;
+    }
+
+    .impact-item {
+      background: rgba(255,255,255,0.48);
+      border: 1px solid var(--border);
+      padding: 1.2rem 1.2rem 1.2rem 1.35rem;
+    }
+
+    .impact-item:hover {
+      background: rgba(255,255,255,0.72);
+      border-color: rgba(37, 150, 190, 0.35);
+    }
+
+    .impact-item::before {
+      background: var(--accent);
+    }
+
+    .impact-kicker {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .impact-title {
+      font-size: 1.02rem;
+      line-height: 1.4;
+      margin-bottom: 0.32rem;
+    }
+
+    .reflection {
+      max-width: 860px;
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .reflection-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .reflection-item {
+      display: flex;
+      gap: 0.85rem;
+      align-items: flex-start;
+    }
+
+    .reflection-bullet {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #d8d4ca;
+      border-radius: 1px;
+      flex-shrink: 0;
+      margin-top: 0.58rem;
+      transition: background 0.2s ease;
+    }
+
+    .reflection-item:hover .reflection-bullet {
+      background: #2596be;
+    }
+
+    .reflection-item p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      margin: 0;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      justify-content: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .page-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .toc {
+        position: static;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .toc-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+        border-left: none;
+      }
+
+      .toc-list a {
+        padding: 0.4rem 0;
+      }
+
+      .toc-list a::before {
+        display: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .challenge-grid,
+      .decision-grid,
+      .impact-layout,
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .problem-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .facts-grid,
+      .impact-grid,
+      .ba-grid,
+      .methods-wrap,
+      .synthesis-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      h1 { max-width: 100%; }
+    }
+
+    @media (max-width: 560px) {
+      .problem-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      nav ul { gap: 1rem; }
+      .page-shell { padding-top: calc(var(--nav-h) + 3.5rem); }
+      .mini-card,
+      .insight-card,
+      .what-card,
+      .before-after-card,
+      .impact-item,
+      .at-a-glance,
+      .what-panel,
+      .impact-section { padding: 1.2rem; }
+    }
+    /* ── Back button ── */
+    .back-btn {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #a3a097;
+      font-style: italic;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeInBtn 0.5s ease 0.6s forwards;
+    }
+
+    .back-btn::before {
+      content: '←';
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--text);
+      font-style: normal;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .back-btn:hover::before {
+      transform: translateX(-3px);
+    }
+
+    @keyframes fadeInBtn {
+      to { opacity: 1; pointer-events: auto; }
+    }
+
+    @media (max-width: 700px) {
+      .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="work-ux.html" class="back-btn">Back to UX Projects</a>
+  <nav>
+    <a href="index.html" class="logo">Yuki Wang</a>
+    <ul>
+      <li><a href="about.html"   class="nav-small">About Me</a></li>
+      <li><a href="work.html"    class="nav-small active">Work</a></li>
+      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
+      <li><a href="contact.html" class="nav-small">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-shell">
+    <aside class="toc">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#challenge">The Challenge</a></li>
+        <li><a href="#methods">Methods</a></li>
+        <li><a href="#synthesis">Synthesis</a></li>
+        <li><a href="#insights">Key Insights</a></li>
+        <li><a href="#decisions">Design Decisions</a></li>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+      </ul>
+    </aside>
+
+    <main class="page-content">
+      <p class="section-label">UX Research and Design Project</p>
+
+      <section class="hero" id="overview">
+        <div>
+          <h1>Mental Health Screening for Adolescents</h1>
+          <p class="hero-intro" style="font-family:'Inter',sans-serif; font-size: 1.02rem; line-height:1.8; color:var(--muted); max-width:52ch;">
+            Commissioned by a school board to build a mental health screening platform from scratch — I led research, design, testing, and reporting end to end.
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.25rem;">
+            <span style="background:#d9eef7; color:#1778a0; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Lean UX Research</span>
+            <span style="background:#cce6f2; color:#155f87; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">UX Design</span>
+            <span style="background:#e8e4db; color:#4a4845; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Survey Design</span>
+            <span style="background:#e8e4db; color:#4a4845; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Usability Testing</span>
+            <span style="background:#e8e4db; color:#4a4845; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Qualitative Analysis</span>
+            <span style="background:#e8e4db; color:#4a4845; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Adolescent Users</span>
+            <span style="background:#dde8de; color:#3d5e40; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">Stakeholder Reporting</span>
+            <span style="background:#dde8de; color:#3d5e40; font-family:'Inter',sans-serif; font-size:0.75rem; letter-spacing:0.04em; padding:0.3rem 0.75rem; border-radius:999px;">End-to-end Delivery</span>
+          </div>
+        </div>
+
+        <aside class="card at-a-glance">
+          <p class="card-label">Overview</p>
+          <div class="facts-grid">
+            <div style="grid-column: 1 / -1;">
+              <p class="fact-k">Role</p>
+              <p class="fact-v">Lead UX Researcher &amp; Designer</p>
+            </div>
+            <div>
+              <p class="fact-k">Participants</p>
+              <p class="fact-v">10 adolescents, mixed ages (12–18)</p>
+            </div>
+            <div>
+              <p class="fact-k">Primary users</p>
+              <p class="fact-v">Students</p>
+            </div>
+            <div>
+              <p class="fact-k">Stakeholder</p>
+              <p class="fact-v">School board (client)</p>
+            </div>
+            <div>
+              <p class="fact-k">Duration</p>
+              <p class="fact-v">4 weeks</p>
+            </div>
+            <div style="grid-column: 1 / -1;">
+              <p class="fact-k">Deliverables</p>
+              <p class="fact-v">Platform · School-wide report · Individual reports</p>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="challenge">
+        <div>
+          <p class="card-label">The Challenge</p>
+          <h2 class="section-heading">Design a survey adolescents could understand, complete accurately, and respond to honestly.</h2>
+          <p class="body-copy">While delivering reliable screening data and actionable reports for schools.</p>
+        </div>
+        <div class="problem-grid" style="margin-top:2rem;">
+          <div class="mini-card"><p>Wide variation in reading ability (ages 12–18)</p></div>
+          <div class="mini-card"><p>Typing and spelling difficulties in Chinese input</p></div>
+          <div class="mini-card"><p>Misunderstood question wording</p></div>
+          <div class="mini-card"><p>Sensitive topics requiring careful handling</p></div>
+        </div>
+      </section>
+
+      <section class="decision-grid" id="methods">
+        <div>
+          <p class="card-label">Methods</p>
+          <h2 class="section-heading">Revealing confusion through behaviour as well as self-report</h2>
+          <p class="body-copy">Because adolescents rarely articulate confusion, direct observation was combined with self-report to capture both behaviour and experience.</p>
+        </div>
+        <div class="methods-wrap">
+          <div class="method-card">
+            <p class="decision-label">Collaborative requirements gathering</p>
+            <p class="method-body">Defined scope, users, and outputs with the school board before design began.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Contextual observation</p>
+            <p class="method-body">Watched students use the platform in school. Real behaviour revealed what self-report missed.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Informal probing</p>
+            <p class="method-body">Asked in the moment if anything was unclear — kept conversational to avoid adding pressure.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Post-session interviews</p>
+            <p class="method-body">Followed up after testing to understand hesitation that observation couldn't explain.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Iterative usability testing</p>
+            <p class="method-body">Self-tested before involving students, refining the design between every round.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="decision-grid" id="synthesis">
+        <div>
+          <p class="card-label">Synthesis</p>
+          <h2 class="section-heading">From raw observation to patterns</h2>
+          <p class="body-copy">After each round, notes were analysed independently — grouping themes, surfacing patterns, identifying variation across age groups. Analysis happened between every round, not just at the end.</p>
+        </div>
+        <div class="synthesis-wrap">
+          <div class="method-card">
+            <p class="decision-label">Organised field notes by session</p>
+            <p class="method-body">Structured by participant and task to spot shared moments of confusion.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Identified repeated patterns</p>
+            <p class="method-body">Issues across multiple participants were prioritised for redesign.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Noted unique differences</p>
+            <p class="method-body">Age-group variation shaped the decision to build two survey versions.</p>
+          </div>
+          <div class="method-card">
+            <p class="decision-label">Fed findings into the next iteration</p>
+            <p class="method-body">Each round produced a short list of changes to test next.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="insights">
+        <p class="card-label">Key Insights</p>
+        <p class="body-copy" style="margin-bottom: 1.5rem;">Four patterns emerged consistently across participants and age groups — each one directly shaped a design decision.</p>
+        <div class="insight-grid">
+          <article class="insight-card">
+            <h3 class="insight-title">Language ≠ Understanding</h3>
+            <p>Some phrases that appeared clear were interpreted differently by adolescents, leading to inconsistent responses.</p>
+          </article>
+          <article class="insight-card">
+            <h3 class="insight-title">Input Method Shapes Response Quality</h3>
+            <p>Typing and spelling difficulties—especially in Chinese input—introduced friction and reduced response reliability.</p>
+          </article>
+          <article class="insight-card">
+            <h3 class="insight-title">Comprehension Varies Across Age Groups</h3>
+            <p>Differences in cognitive and linguistic development (ages 12–18) meant that a single survey design could not work equally well for all users.</p>
+          </article>
+          <article class="insight-card">
+            <h3 class="insight-title">Behaviour Reveals Hidden Issues</h3>
+            <p>Users rarely reported confusion directly, but hesitation, re-reading, and response patterns revealed where understanding broke down.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="decision-grid" id="decisions">
+        <div>
+          <p class="card-label">Design Decisions</p>
+          <h2 class="section-heading">Every change came from observed behaviour, not assumption.</h2>
+          <p class="body-copy">Each entry below names the behaviour that prompted the change.</p>
+        </div>
+
+        <div class="decision-wrap">
+          <div class="before-after-card">
+            <p class="decision-label">Adapted for Different Age Groups</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Before</p>
+                <h4 class="ba-title">Single survey for all</h4>
+                <p>One version assumed similar comprehension across ages 12–18.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">After</p>
+                <h4 class="ba-title">Two age-specific versions</h4>
+                <p>Same constructs, adjusted wording and complexity per age group.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="before-after-card">
+            <p class="decision-label">Simplified Language</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Before</p>
+                <h4 class="ba-title">Abstract phrasing</h4>
+                <p>Wording that appeared clear was interpreted inconsistently.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">After</p>
+                <h4 class="ba-title">Age-appropriate wording</h4>
+                <p>Rewrote unclear phrasing to match how students actually understood the questions.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="before-after-card">
+            <p class="decision-label">Reduced Input Friction</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Before</p>
+                <h4 class="ba-title">Open-text responses</h4>
+                <p>Younger users struggled with typing and spelling in Chinese input.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">After</p>
+                <h4 class="ba-title">Selectable options</h4>
+                <p>Replaced open text with selectable answers — mouse only, no typing.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="before-after-card">
+            <p class="decision-label">Response Format Selection</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Before</p>
+                <h4 class="ba-title">Format chosen without evidence</h4>
+                <p>Multiple choice, open text, and sliders considered with no basis for choosing.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">After</p>
+                <h4 class="ba-title">Multiple choice adopted</h4>
+                <p>Open text caused spelling friction; sliders were difficult on small screens.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="before-after-card">
+            <p class="decision-label">Forced Completion</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Before</p>
+                <h4 class="ba-title">Questions could be skipped</h4>
+                <p>Incomplete responses made screening data unreliable.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">After</p>
+                <h4 class="ba-title">Validated before submission</h4>
+                <p>Platform blocked submission and returned students to any missed question automatically.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="before-after-card">
+            <p class="decision-label">Reduced Bias</p>
+            <div class="ba-grid">
+              <div class="ba-box before-box">
+                <p class="ba-label">Risk</p>
+                <h4 class="ba-title">Patterned responses</h4>
+                <p>Question order and structure considered as bias sources from the start.</p>
+              </div>
+              <div class="ba-box after-box">
+                <p class="ba-label">Change</p>
+                <h4 class="ba-title">Structure and randomisation</h4>
+                <p>Order and structure randomised where appropriate to reduce patterned responses.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="impact-section" id="impact">
+        <div class="impact-layout">
+          <div>
+            <p class="card-label">Impact</p>
+            <h2 class="section-heading">Adopted at scale. Screening time cut by two thirds.</h2>
+            <p class="body-copy">
+              Iterative testing produced a platform stable enough to adopt at scale — no redesign needed after launch.
+            </p>
+          </div>
+
+          <div class="impact-grid">
+            <div class="impact-item">
+              <p class="impact-kicker">Scale</p>
+              <h3 class="impact-title">5,000+ students screened</h3>
+              <p>Adopted across schools — the design held up at scale.</p>
+            </div>
+            <div class="impact-item">
+              <p class="impact-kicker">Efficiency</p>
+              <h3 class="impact-title">3 days → 1 day</h3>
+              <p>School-wide screening cut from three days to one.</p>
+            </div>
+            <div class="impact-item">
+              <p class="impact-kicker">Usability</p>
+              <h3 class="impact-title">All students completed independently</h3>
+              <p>No assistance needed across the full age range.</p>
+            </div>
+            <div class="impact-item">
+              <p class="impact-kicker">Data quality</p>
+              <h3 class="impact-title">Reliable, actionable data</h3>
+              <p>Consistent responses supported individual and class-level school decisions.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reflection" id="reflection">
+        <p class="card-label">Reflection</p>
+        <h2 class="section-heading">What I would do differently</h2>
+        <ul class="reflection-list">
+          <li class="reflection-item">
+            <span class="reflection-bullet"></span>
+            <p>I would debrief with teachers after each round — they had a vantage point I didn't.</p>
+          </li>
+          <li class="reflection-item">
+            <span class="reflection-bullet"></span>
+            <p>I would also document synthesis more formally, so reasoning could be shared with stakeholders throughout.</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = document.querySelectorAll('main section[id], main .hero[id]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, {
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0.1,
+    });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+
+  <footer>
+    <p>© 2026 Yuki Wang. All rights reserved.</p>
+  </footer>
+</body>
+</html>
