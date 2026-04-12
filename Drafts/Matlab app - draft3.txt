@@ -1,0 +1,8 @@
+- "Designing a touch-based app to run one-hour behavioural experiments without researcher intervention — handling multiple SNR conditions, timed breaks, automated data logging, and physiological data collection in a single continuous session."
+
+still mention "video and audio presentation", and put (signal-noise-ratio) after "SNR"
+
+- "Duration: 2 months", change to "Duration: 8 weeks".
+
+- Methods, change " "what were you looking for there?" " into " "Is there anything you are looking for?"
+

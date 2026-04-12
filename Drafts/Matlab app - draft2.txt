@@ -1,0 +1,114 @@
+Questions to answer first
+
+?
+What specifically was distracting? (colour, layout density, button size?)
+Colour was bright white on the buttons, not nice to look at, also affect the pupil size when screens change;
+layout: awry, they are not well aligned;
+button size: small. based on observations. 
+?
+"Constant changes" — who was making them? You as researcher, or the software?
+?
+Constant changes means, if you want to add more test and make it longer, with more conditions, it will disturb the experiment of course. As the original only support a few minutes experiment. I need to change that into an one hour experiment, with more different conditions. 
+When I say conditions, I mean the snr level. But maybe better change the phrase into something easily understandable.
+
+
+"Only one condition at a time" — is this a technical limitation or a design one?
+The original test was like this. I think it's both. They think it's fine to disturb the experiment all the time and do the changes manually when you want to add more conditions. I didn't. As it will introduce more errors, lots of strains on the researcher if you need to change it say seven to eight times, take much longer time for the full experiment, and affect data quality (affect participants' physiological data when you disturb them, also it'll be worse if you make mistakes when make the changes.
+
+Did participants say they felt fatigued, or is this inferred from dropout/errors?
+This is thought myself. The whole experiment is one hour. Naturally one is fatigued. Our practice code instructs that it can't be lasted for more than one hour and a half or two hours I think, otherwise we will need to pay them significantly more. 
+
+
+
+
+Suggested additions
+
+Each method card should say what you were looking for, not just what you did. E.g. "Observed participants mid-session to catch hesitation and errors that post-session reports would miss."
+
+?
+How many rounds of iteration were there?
+Don't know, constantly. I change things after testing on myself, then change things based on how the participant react. 
+
+?
+Did you test with researchers too, or only participants?
+On myself, other fellow researcher, and yes, 10 participants as pilot study.
+
+
+
+
+Suggested
+
+Add 2–3 short cards describing how you processed observations into patterns. E.g. "Grouped field notes by session — what caused hesitation, what caused errors, what was missed entirely." Mirrors what the mental health case study already does well.
+
+Grouped notes. Find patterns. 
+?
+Did you keep written notes during sessions, or debrief after?
+Yes I kept writing notes during the session.
+?
+Were changes discussed with anyone (supervisor, collaborator) or decided solo?
+Mostly decided solo. my supervisor only came in the end for a check really. 
+
+
+
+
+Questions to answer first
+
+?
+These are general UX principles — what did you actually observe that led to each one? One specific moment per insight would make these feel real.
+?
+What did I observe:
+People stop and ask questions, about what that is and what they should do next, meaning the instructions or the flow is not clear.
+People hesitate or pause in the middle, looking for things on the screen. Then you need to ask them what that is.
+They seem surprised by something on the screen -- need to ask.
+
+E.g. for "behaviour shows more than words" — what did a participant do that surprised you?
+I won't say surprise me, only that each hesitation and reaction or emotion change, you need to notice, and ask what's happening for them, especially if they are hesitating.
+
+
+
+
+Questions / suggestions
+
+?
+"Manual switching" — who was doing the switching and when? A sentence of context would help.
+The researcher needs to do the switching, like i said before. 
+?
+"Content could influence later response" — did this actually happen, or was it a risk you designed against proactively?
+Well yes. We need to keep their reaction neutral, or as little disturbance to the final data as possible. We need to let them have something to engage them during the break, rather than sitting there uncomfortably starring at a blank screen. I mean they don't have to watch that video during break, but just to make them more at ease.
+
+The "After" descriptions are good but short. Each could add one line: what the change felt like for participants, or what it changed in the data.
+The change felt like the experiment is now more smooth and comfortable. 
+I won't know what changed in the data, as I don't have a "before" in this part of data collection. it's rather a protocol that we studied psychology know.
+
+
+
+Suggested
+
+"60 experiments completed in 2 months — typically takes 4–5 months."
+
+"1 dropout from 30 participants. Expected rate was 17% — that's 5 people."
+
+Shorter, punchier. The second one benefits from making the expected number concrete (5 people) — feels more real than a percentage.
+
+?
+Where does the 17% expected dropout rate come from? Worth naming the source briefly for credibility.
+From experience. From the experiments other people had done before. We planned some dropouts, or extra money. As we need to pay them. 
+
+
+
+
+
+Suggested
+
+This needs expanding. Two angles worth adding: (1) the tension between being a researcher and a UX designer on the same study — did that create any conflicts? (2) what you'd do differently if starting again with the no-screenshots problem in mind.
+(1) it certainly makes the process much more demanding. I need to design the interface, while keep in mind what type of data I want to get. It's not just for the comfort of participants. 
+Also certainly it takes much more time and energy on me.
+
+(2) what you'd do differently if starting again with the no-screenshots problem in mind.
+I would probably take notes more systematically and document each change to see the comparison. As at that time, the primary goal is to design that system that serving the experiment, rather than doing UX research. 
+
+?
+What's the most surprising thing you learned from running this — about the participants, or about your own design instincts?
+I'd say the most surprising thing I learned is that I can actually do this. I have no background in UI designing at all. 
+And I have good instincts in doing designing and journey mapping.
+About participants, I'm not so sure. I suppose one is that they are very different. You have to respect that difference. Like some would be very cooperative, then you need to be careful of bias in "pleasing the researcher", for example, let them know there's no right or wrong answer; some seem to be only want to finish this and leave, for money perhaps. Then you need to make sure you can get decent data, let them more at ease and comfortable, so they are more likely to do the experiment carefully. But sometimes of course, there's just nothing you can do. 
