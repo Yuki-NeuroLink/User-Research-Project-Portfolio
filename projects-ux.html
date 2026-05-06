@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>work-ux — Yuki Wang</title>
+  <title>Projects-UX — Yuki Wang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,6 +18,13 @@
       --muted:    #6b6860;
       --accent:   #2596be;
       --nav-h:    64px;
+      /* UX Strategy palette */
+      --ux-bg:      #f0f0f0;
+      --ux-top:     #004055;
+      --ux-tag:     #006080;
+      --ux-title:   #004055;
+      --ux-chip-bg: #e6e6e6;
+      --ux-chip-bd: #d0d0d0;
     }
 
     html { scroll-behavior: smooth; }
@@ -36,7 +43,7 @@
       background: rgba(240, 237, 230, 0.94);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -102,7 +109,7 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      font-size: clamp(2.2rem, 5vw, 4rem);
       line-height: 1.08;
       letter-spacing: -0.02em;
       font-weight: 900;
@@ -111,7 +118,7 @@
 
     .hero h1 em {
       font-style: italic;
-      color: var(--accent);
+      color: var(--ux-tag);
     }
 
     .cards-grid {
@@ -121,8 +128,8 @@
     }
 
     .project-card {
-      background: #faf7f1;
-      border: 1px solid #e3ddd2;
+      background: var(--ux-bg);
+      border: 1px solid var(--ux-chip-bd);
       border-left: 4px solid transparent;
       border-radius: 16px;
       padding: 1.75rem;
@@ -132,15 +139,16 @@
       justify-content: space-between;
       text-decoration: none;
       color: inherit;
+      cursor: pointer;
       transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, border-left-color 0.22s ease, background 0.22s ease;
     }
 
     .project-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 24px rgba(26, 26, 26, 0.05);
-      border-color: #d9d1c4;
-      border-left-color: var(--accent);
-      background: #fcf9f4;
+      box-shadow: 0 10px 28px rgba(0, 64, 85, 0.12);
+      border-color: var(--ux-chip-bd);
+      border-left-color: var(--ux-top);
+      background: #f8f8f8;
     }
 
     .card-meta {
@@ -158,8 +166,8 @@
       text-transform: uppercase;
     }
 
-    .card-tag { color: var(--accent); }
-    .card-status { color: var(--muted); }
+    .card-tag { color: var(--ux-tag); }
+    .card-status { color: var(--ux-title); opacity: 0.6; }
 
     .card-title {
       font-size: clamp(1.45rem, 2.4vw, 2rem);
@@ -167,12 +175,13 @@
       font-weight: 900;
       margin-bottom: 0.9rem;
       letter-spacing: -0.01em;
+      color: var(--ux-title);
     }
 
     .card-desc {
       font-family: 'Inter', sans-serif;
       font-size: 0.95rem;
-      color: var(--muted);
+      color: var(--ux-tag);
       max-width: 36ch;
     }
 
@@ -187,10 +196,10 @@
     .chip {
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
-      color: var(--text);
-      border: 1px solid #ddd6ca;
+      color: var(--ux-title);
+      border: 1px solid var(--ux-chip-bd);
       padding: 0.35rem 0.6rem;
-      background: #f3efe8;
+      background: var(--ux-chip-bg);
       border-radius: 999px;
     }
 
@@ -199,7 +208,8 @@
       font-size: 0.76rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text);
+      color: var(--ux-tag);
+      opacity: 0.7;
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
@@ -269,7 +279,7 @@
     .back-btn:hover {
       color: var(--text);
       font-style: normal;
-      border-color: var(--accent);
+      border-color: var(--ux-tag);
       transform: translateY(-2px);
     }
 
@@ -284,26 +294,120 @@
     @media (max-width: 700px) {
       .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
     }
+
+    /* ── Hamburger nav ── */
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text); text-decoration: none;
+      letter-spacing: 0.01em; position: relative; z-index: 300;
+    }
+    .nav-right { display: flex; align-items: center; gap: 2rem; position: relative; z-index: 300; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem;
+      letter-spacing: 0.03em; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .hamburger {
+      display: flex; flex-direction: column; gap: 4.5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger .bar {
+      width: 20px; height: 1.5px; background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .menu-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 150;
+      display: flex; flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 1rem 0;
+      font-family: 'Inter', sans-serif; font-size: 1.0rem;
+      font-weight: 500; letter-spacing: 0.04em; color: var(--text);
+      text-decoration: none; background: none; border: none;
+      cursor: pointer; text-align: left; transition: color 0.2s;
+    }
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--accent); }
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease; flex-shrink: 0;
+    }
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 180px; }
+    .submenu a {
+      display: block; padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      color: var(--muted); text-decoration: none;
+      border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--accent); }
+    @media (max-width: 680px) { .nav-links { display: none; } }
   </style>
 </head>
 <body>
-  <a href="projects.html" class="back-btn">Back to<br>Projects</a>
+  <a href="projects.html" class="back-btn">Back</a>
 
-  <nav>
+    <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
-    <ul>
-      <li><a href="about.html"   class="nav-small">About Me</a></li>
-      <li><a href="projects.html"    class="nav-small active">Work</a></li>
-      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
-      <li><a href="contact.html" class="nav-small">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
   </nav>
+
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="workToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="workSubmenu">
+          <a href="projects-ux.html" class="active">UX Strategy</a>
+          <a href="projects-research.html">Deep Research</a>
+        </div>
+      </li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
 
   <div class="page-content">
     <p class="section-label">UX Research &amp; Design</p>
 
     <section class="hero">
-      <h1>Selected <em>UX research</em><br>projects.</h1>
+      <h1>Selected <em>UX strategy</em><br>projects.</h1>
     </section>
 
     <section class="cards-grid">
@@ -313,11 +417,10 @@
         <div class="card-top">
           <div class="card-meta">
             <span class="card-tag">UX Research &amp; Design</span>
-            <span class="card-status">Featured project</span>
           </div>
           <h2 class="card-title">Adolescent Mental Health Survey Design</h2>
           <p class="card-desc">
-            Designing a large-scale adolescent survey experience with age-appropriate wording, input formats, and clearer measurement for school-based mental health screening.
+            Creating a clear, age-appropriate survey for adolescent mental health screening in schools.
           </p>
         </div>
         <div class="card-bottom">
@@ -336,11 +439,10 @@
         <div class="card-top">
           <div class="card-meta">
             <span class="card-tag">UX + System Design</span>
-            <span class="card-status">Featured project</span>
           </div>
           <h2 class="card-title">MATLAB App for Behavioural Experiments</h2>
           <p class="card-desc">
-            Designing a touch-based experimental platform to run controlled one-hour studies — integrating audio and video stimuli, survey questions, countdown timing, and automated data logging.
+            Building a touch-based platform for controlled experiments with integrated data logging.
           </p>
         </div>
         <div class="card-bottom">
@@ -361,5 +463,58 @@
     <p>© 2026 Yuki Wang. All rights reserved.</p>
   </footer>
 
+  <script>
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const workToggle  = document.getElementById('workToggle');
+    const workSubmenu = document.getElementById('workSubmenu');
+    menuBtn.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      menuOverlay.setAttribute('aria-hidden', !isOpen);
+      if (!isOpen) {
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+    workToggle.addEventListener('click', () => {
+      const isOpen = workSubmenu.classList.toggle('open');
+      workToggle.classList.toggle('open', isOpen);
+      workToggle.setAttribute('aria-expanded', isOpen);
+    });
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+      });
+    });
+
+    // Close menu when clicking the overlay background
+    menuOverlay.addEventListener('click', (e) => {
+      if (e.target === menuOverlay) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+        menuBtn.focus();
+      }
+    });
+  </script>
 </body>
 </html>

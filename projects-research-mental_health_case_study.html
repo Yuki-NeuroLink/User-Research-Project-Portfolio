@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adolescent Mental Health at Scale — Yuki Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f0ede6;
+      --border:      #ddd9d0;
+      --text:        #1a1a1a;
+      --muted:       #6b6860;
+      --nav-h:       64px;
+      --toc-w:       220px;
+      --annot-w:     120px;
+      /* Deep Research palette */
+      --res-bg:      #fdf8f2;
+      --res-top:     #7a5a3a;
+      --res-tag:     #9f5f23;
+      --res-title:   #6a3e16;
+      --res-chip-bg: #eedcc0;
+      --res-chip-bd: #d9bc97;
+      --res-deep:    #3a1f00;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════
+       NAV
+    ══════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240,237,230,0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem,5vw,3rem);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700;
+      color: var(--text); text-decoration: none; letter-spacing: 0.01em; z-index: 300; position: relative;
+    }
+    .nav-right { display: flex; align-items: center; gap: 2rem; position: relative; z-index: 300; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem; letter-spacing: 0.03em;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+    .hamburger {
+      display: flex; flex-direction: column; gap: 4.5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger .bar {
+      width: 20px; height: 1.5px; background: var(--text);
+      border-radius: 1px; transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ══════════════════════════════
+       OVERLAY MENU
+    ══════════════════════════════ */
+    .menu-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 150;
+      display: flex; flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem,5vw,3rem) 3rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+    .overlay-list > li > a, .overlay-list > li > button {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 1rem 0;
+      font-family: 'Inter', sans-serif; font-size: 1.0rem; font-weight: 500;
+      letter-spacing: 0.04em; color: var(--text);
+      text-decoration: none; background: none; border: none;
+      cursor: pointer; text-align: left; transition: color 0.2s;
+    }
+    .overlay-list > li > a:hover, .overlay-list > li > button:hover { color: var(--res-tag); }
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease; flex-shrink: 0;
+    }
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 200px; }
+    .submenu a {
+      display: block; padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--muted);
+      text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover, .submenu a.active { color: var(--text); border-color: var(--res-tag); }
+
+    /* ══════════════════════════════
+       SECTION STRIP  (floating "now reading")
+    ══════════════════════════════ */
+    .sec-strip {
+      position: fixed; top: var(--nav-h); left: 0; right: 0;
+      height: 30px;
+      background: rgba(253,248,242,0.93);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--res-chip-bd);
+      display: flex; align-items: center;
+      padding: 0 clamp(1.5rem,5vw,3rem);
+      z-index: 190;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .sec-strip.visible { opacity: 1; }
+    .sec-strip-name {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem;
+      color: var(--res-tag); letter-spacing: 0.02em;
+    }
+
+    /* ══════════════════════════════
+       PROGRESS BAR
+    ══════════════════════════════ */
+    .toc-progress {
+      height: 1.5px; background: var(--border);
+      position: fixed; top: var(--nav-h); left: 0; right: 0;
+      z-index: 199;
+    }
+    .toc-progress-fill {
+      height: 100%; background: var(--res-tag); opacity: 0.65;
+      width: 0%; transition: width 0.1s linear;
+    }
+
+    /* ══════════════════════════════
+       TOC BUTTON + DRAWER (mobile)
+    ══════════════════════════════ */
+    .toc-btn {
+      display: none; align-items: center; gap: 5px;
+      background: transparent; border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 0 10px; height: 26px;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.04em; color: var(--muted);
+    }
+    .toc-btn-lines { display: flex; flex-direction: column; gap: 2.5px; }
+    .toc-btn-lines span { display: block; width: 9px; height: 1px; background: var(--muted); border-radius: 1px; }
+
+    .toc-scrim { position: fixed; inset: 0; z-index: 240; background: transparent; pointer-events: none; }
+    .toc-scrim.open { pointer-events: all; }
+
+    .toc-drawer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 250;
+      background: var(--res-bg); border-top: 0.5px solid var(--border);
+      border-radius: 14px 14px 0 0;
+      padding: 0 clamp(1.5rem,5vw,2rem) 2rem;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+      pointer-events: none;
+    }
+    .toc-drawer.open { transform: translateY(0); pointer-events: all; }
+    .toc-drawer-handle { width: 32px; height: 3px; background: var(--border); border-radius: 2px; margin: 10px auto 14px; }
+    .toc-drawer-reading { font-family: 'Inter', sans-serif; font-size: 0.62rem; color: #a09d97; margin-bottom: 8px; }
+    .toc-drawer-list { list-style: none; }
+    .toc-drawer-list li { border-bottom: 0.5px solid #ebe7e0; }
+    .toc-drawer-list li:last-child { border-bottom: none; }
+    .toc-drawer-list a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0; font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-drawer-list a:hover { color: var(--text); }
+    .toc-drawer-list a.active { color: var(--res-tag); }
+    .toc-drawer-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--res-tag); opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+    .toc-drawer-list a.active .toc-drawer-dot { opacity: 0.8; }
+
+    /* ══════════════════════════════
+       BACK BUTTON
+    ══════════════════════════════ */
+    .back-btn {
+      position: fixed; bottom: 2rem; left: 2rem; z-index: 200;
+      font-family: 'Inter', sans-serif; font-size: 0.74rem;
+      letter-spacing: 0.04em; color: #a3a097;
+      font-style: italic; text-decoration: none;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.2rem;
+      transition: color 0.2s, border-color 0.2s, transform 0.2s;
+      opacity: 0; pointer-events: none;
+      animation: fadeInBtn 0.5s ease 0.6s forwards;
+    }
+    .back-btn::before { content: '←'; margin-right: 0.35em; display: inline-block; transition: transform 0.2s; }
+    .back-btn:hover { color: var(--text); font-style: normal; border-color: var(--res-tag); transform: translateY(-2px); }
+    .back-btn:hover::before { transform: translateX(-3px); }
+    @keyframes fadeInBtn { to { opacity: 1; pointer-events: auto; } }
+
+    /* ══════════════════════════════
+       PAGE SHELL  (3-col: toc | content)
+    ══════════════════════════════ */
+    .page-shell {
+      max-width: calc(1160px + 6rem); margin: 0 auto;
+      padding: calc(var(--nav-h) + 4.5rem) clamp(1.5rem,5vw,3rem) 8rem;
+      display: grid;
+      grid-template-columns: var(--toc-w) minmax(0,1fr);
+      gap: 0 3rem;
+      align-items: start;
+    }
+
+    /* ── Sidebar TOC ── */
+    .toc {
+      position: sticky; top: calc(var(--nav-h) + 2.5rem);
+      align-self: start;
+    }
+    .toc-label {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem;
+      letter-spacing: 0.02em; color: var(--muted); margin-bottom: 1rem;
+    }
+    .toc-list { list-style: none; border-left: 1px solid var(--border); }
+    .toc-list a {
+      display: block; position: relative;
+      padding: 0.6rem 0 0.6rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.80rem; color: #a3a097;
+      text-decoration: none; transition: color 0.22s, transform 0.22s;
+    }
+    .toc-list a::before {
+      content: ''; position: absolute; left: -1px; top: 0.4rem; bottom: 0.4rem;
+      width: 2px; background: transparent; transition: background 0.22s, width 0.22s;
+    }
+    .toc-list a:hover, .toc-list a.active { color: var(--res-title); transform: translateX(3px); }
+    .toc-list a:hover::before, .toc-list a.active::before { background: var(--res-tag); width: 3px; }
+
+    /* ══════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════ */
+    .page-content { min-width: 0; }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 5rem;
+      scroll-margin-top: calc(var(--nav-h) + 2rem);
+    }
+    .eyebrow {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem;
+      letter-spacing: 0.03em; color: var(--res-tag);
+      margin-bottom: 1rem; display: block;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem,4.5vw,3.6rem);
+      font-weight: 900; line-height: 1.1;
+      color: var(--res-deep); margin-bottom: 0.4rem;
+    }
+    h1 em { font-style: italic; color: var(--res-tag); }
+    .hero-subtitle {
+      font-size: 0.95rem; color: var(--muted);
+      font-style: italic; margin-bottom: 1.5rem;
+    }
+    .hero-intro {
+      font-size: 0.88rem; line-height: 1.9;
+      color: var(--muted); max-width: 60ch; margin-bottom: 2.5rem;
+    }
+
+    /* ── At a glance table ── */
+    .glance {
+      border-top: 1px solid var(--res-chip-bd);
+      border-bottom: 1px solid var(--res-chip-bd);
+      margin-bottom: 0;
+    }
+    .glance-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: #6a3e16; line-height: 1.3;
+      padding: 0.75rem 0 0.6rem;
+      border-bottom: 1px solid var(--res-chip-bd);
+    }
+    .glance-row {
+      display: grid; grid-template-columns: 110px 1fr;
+      padding: 0.65rem 0;
+      border-bottom: 0.5px solid #e8ddd0;
+    }
+    .glance-row:last-child { border-bottom: none; }
+    .glance-k {
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--res-deep); padding-right: 1rem;
+    }
+    .glance-v { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+    /* ══════════════════════════════
+       ANNOTATION LAYOUT
+       Desktop: two-col grid (annotation | content)
+       Mobile:  single col, annotation above rule above content
+    ══════════════════════════════ */
+    .annot-section {
+      display: grid;
+      grid-template-columns: var(--annot-w) 1fr;
+      gap: 0 2rem;
+      padding: 4.5rem 0;
+      border-top: 1px solid var(--res-chip-bd);
+      scroll-margin-top: calc(var(--nav-h) + 2rem);
+    }
+    .annot-section:last-child { border-bottom: 1px solid var(--res-chip-bd); }
+
+    /* Section title — Playfair Display, option B colour */
+    .annot-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: #6a3e16; line-height: 1.3;
+      text-align: right;
+      padding-right: 1.25rem;
+      border-right: 1px solid var(--res-chip-bd);
+      padding-top: 0.15rem;
+    }
+
+    .annot-body { min-width: 0; }
+
+    /* ── Body text ── */
+    .annot-body p { font-size: 0.92rem; color: var(--muted); line-height: 1.85; }
+
+    /* ── Inner item title — consistent across ALL sections ── */
+    .item-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--res-deep); line-height: 1.35;
+      margin-bottom: 0.3rem;
+    }
+
+    /* ── Inline run-in label ── */
+    .inline-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      color: var(--res-deep);
+    }
+
+    /* Body text following a title — 1rem indent, .item only (not numbered rows) */
+    .item .item-title ~ p,
+    .item .item-title ~ ul { padding-left: 1rem; }
+
+    /* Compact sections — reduced vertical padding */
+    .annot-section.compact { padding: 2.5rem 0; }
+
+    /* Numbered rows — no divider lines, spacing reduced ~30% from 1.4rem */
+    .num-row {
+      display: grid; grid-template-columns: 2rem 1fr;
+      gap: 0 0.75rem; align-items: baseline;
+    }
+    .num-row + .num-row { margin-top: 0.98rem; }
+    .row-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem; color: var(--res-chip-bd);
+      font-weight: 700; text-align: right;
+    }
+    .row-content { }
+
+    /* Bullet list inside sections */
+    .section-list { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+    .section-list li {
+      display: flex; gap: 0.65rem; align-items: flex-start;
+      font-size: 0.92rem; color: var(--muted); line-height: 1.75;
+    }
+    .section-list li::before {
+      content: ''; width: 4px; height: 4px; border-radius: 50%;
+      background: var(--res-chip-bd); flex-shrink: 0; margin-top: 0.6rem;
+    }
+
+    /* Outputs — numbered, no dividers, spacing reduced ~30% from 1rem */
+    .output-item {
+      display: grid; grid-template-columns: 2rem 1fr;
+      gap: 0 0.6rem; align-items: baseline;
+    }
+    .output-item + .output-item { margin-top: 0.7rem; }
+    .output-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem; color: var(--res-chip-bd);
+      font-weight: 700; text-align: right;
+    }
+    .output-text { font-size: 0.92rem; color: var(--muted); line-height: 1.75; }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem,5vw,3rem);
+      display: flex; justify-content: center;
+    }
+    footer p { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--muted); }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+
+    /* Hide sidebar TOC, show button + progress */
+    @media (max-width: 1040px) {
+      .toc { display: none; }
+      .toc-btn { display: flex; }
+      .page-shell { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile annotation: single column, label above rule above content */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .back-btn { bottom: 1.2rem; left: 1.2rem; }
+
+      .annot-section {
+        display: block;
+        padding: 3rem 0;
+      }
+
+      .annot-label {
+        text-align: left;
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--res-chip-bd);
+        padding-bottom: 0.6rem;
+        margin-bottom: 1.25rem;
+        display: block;
+        font-size: 1.0rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="projects-research.html" class="back-btn">Back</a>
+
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="logo">Yuki Wang</a>
+    <div class="nav-right">
+      <button class="toc-btn" id="tocBtn" aria-expanded="false" aria-controls="tocDrawer">
+        <div class="toc-btn-lines"><span></span><span></span><span></span></div>
+        Contents
+      </button>
+      <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="workToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="workSubmenu">
+          <a href="projects-ux.html">UX Strategy</a>
+          <a href="projects-research.html" class="active">Deep Research</a>
+        </div>
+      </li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- Floating section name -->
+  <div class="sec-strip" id="secStrip" aria-hidden="true">
+    <span class="sec-strip-name" id="secStripName"></span>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="toc-progress"><div class="toc-progress-fill" id="tocProgressFill"></div></div>
+
+  <!-- Page shell -->
+  <div class="page-shell">
+
+    <!-- Sidebar TOC -->
+    <nav class="toc" aria-label="Contents">
+      <p class="toc-label">Contents</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#context">Research context</a></li>
+        <li><a href="#objectives">Research objectives</a></li>
+        <li><a href="#instrument">Instrument design</a></li>
+        <li><a href="#data">Data collection</a></li>
+        <li><a href="#methods">Analysis &amp; methods</a></li>
+        <li><a href="#findings">Key findings</a></li>
+        <li><a href="#implications">System interpretation</a></li>
+        <li><a href="#outputs">Research outputs</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="page-content">
+
+      <!-- HERO / OVERVIEW -->
+      <section class="hero" id="overview" data-section="Overview">
+        <span class="eyebrow">Psychology &amp; Assessment · Deep Research</span>
+        <h1>Adolescent Mental Health <em>at Scale</em></h1>
+        <p class="hero-subtitle">Measurement, Drivers, and System Insight</p>
+        <p class="hero-intro">Established a scalable framework for assessing student mental health and uncovering key behavioural and environmental drivers of wellbeing. By linking risk patterns to academic, family, and lifestyle factors, it enabled more targeted and preventative responses within schools.</p>
+
+        <div class="glance">
+          <p class="glance-label">At a glance</p>
+          <div class="glance-row">
+            <span class="glance-k">Setting</span>
+            <span class="glance-v">Secondary school mental health screening, China</span>
+          </div>
+          <div class="glance-row">
+            <span class="glance-k">Sample</span>
+            <span class="glance-v">~1,488 students across two year groups, ages 10–17</span>
+          </div>
+          <div class="glance-row">
+            <span class="glance-k">Delivery</span>
+            <span class="glance-v">Browser-based system (computer-first), with mobile as supplementary access</span>
+          </div>
+          <div class="glance-row">
+            <span class="glance-k">Analysis tool</span>
+            <span class="glance-v">R — descriptive stats, group comparisons, regression</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESEARCH CONTEXT -->
+      <section class="annot-section" id="context" data-section="Research context">
+        <span class="annot-label">Research context</span>
+        <div class="annot-body">
+          <div class="item">
+            <p class="item-title">Limitations of existing approaches</p>
+            <ul class="section-list">
+              <li>Screening often functions as one-off detection, with limited insight into underlying causes</li>
+              <li>Psychological risk is typically treated as individual-level, without sufficient attention to environmental and behavioural drivers</li>
+            </ul>
+          </div>
+          <div class="item">
+            <p class="item-title">Core need</p>
+            <p>A scalable approach that not only identifies at-risk students, but also captures the drivers of wellbeing, enabling more informed and preventative responses at the school level.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESEARCH OBJECTIVES -->
+      <section class="annot-section" id="objectives" data-section="Research objectives">
+        <span class="annot-label">Research objectives</span>
+        <div class="annot-body">
+          <div class="num-row">
+            <span class="row-num">01</span>
+            <div class="row-content">
+              <p class="item-title">Screening (identification)</p>
+              <p>Systematically identify students at elevated psychological risk to support timely follow-up and prioritisation of limited school resources.</p>
+            </div>
+          </div>
+          <div class="num-row">
+            <span class="row-num">02</span>
+            <div class="row-content">
+              <p class="item-title">Measurement (baseline profiling)</p>
+              <p>Establish a structured, population-level baseline of student mental health across multiple dimensions, enabling comparison across age, gender, and cohort groups.</p>
+            </div>
+          </div>
+          <div class="num-row">
+            <span class="row-num">03</span>
+            <div class="row-content">
+              <p class="item-title">Driver analysis (explanatory layer)</p>
+              <p>Examine how academic pressure, family context, and lifestyle factors relate to mental health outcomes, moving beyond detection toward understanding underlying contributors.</p>
+            </div>
+          </div>
+          <div class="num-row">
+            <span class="row-num">04</span>
+            <div class="row-content">
+              <p class="item-title">System insight (application)</p>
+              <p>Generate evidence that can inform both individual-level intervention and broader school-level decision-making, bridging screening outputs with actionable response strategies.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- INSTRUMENT DESIGN -->
+      <section class="annot-section" id="instrument" data-section="Instrument design">
+        <span class="annot-label">Instrument design</span>
+        <div class="annot-body">
+          <div class="item">
+            <p class="item-title">Core scales</p>
+            <p>Standardised mental health and stressor measures to ensure reliability and comparability across participants.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Dimensions</p>
+            <p>Multi-dimensional coverage including anxiety, interpersonal sensitivity, somatic symptoms, and behavioural tendencies.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Contextual variables</p>
+            <p>Additional items capturing academic pressure, family environment, and lifestyle factors to enable analysis of potential drivers of wellbeing.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- DATA COLLECTION -->
+      <section class="annot-section compact" id="data" data-section="Data collection">
+        <span class="annot-label">Data collection</span>
+        <div class="annot-body">
+          <div class="item">
+            <p class="item-title">Scale</p>
+            <p>~1,488 students (ages 10–17) separated into two year groups.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Delivery</p>
+            <p>Browser-based system (computer-first), with mobile as supplementary access to ensure coverage and accessibility.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Data quality control</p>
+            <p>Removal of invalid responses (~10%) using validity checks to improve reliability and reduce response bias.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANALYSIS & METHODS -->
+      <section class="annot-section compact" id="methods" data-section="Analysis &amp; methods">
+        <span class="annot-label">Analysis &amp; methods</span>
+        <div class="annot-body">
+          <div class="item">
+            <p class="item-title">Tools</p>
+            <p>R used for structured statistical analysis.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Approach</p>
+            <p>Combined descriptive stats, group comparisons, and regression to detect patterns.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Focus</p>
+            <p>Identifying population-level trends and differences across age, gender, and context, and exploring potential contributors to overall mental health through relationships between stressors and outcomes.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- KEY FINDINGS -->
+      <section class="annot-section compact" id="findings" data-section="Key findings">
+        <span class="annot-label">Key findings</span>
+        <div class="annot-body">
+          <div class="num-row">
+            <span class="row-num">01</span>
+            <div class="row-content">
+              <p class="item-title">Risk distribution</p>
+              <p>Identified both at-risk and borderline groups requiring attention.</p>
+            </div>
+          </div>
+          <div class="num-row">
+            <span class="row-num">02</span>
+            <div class="row-content">
+              <p class="item-title">Group differences</p>
+              <p>Older students showed consistently higher psychological risk levels.</p>
+            </div>
+          </div>
+          <div class="num-row">
+            <span class="row-num">03</span>
+            <div class="row-content">
+              <p class="item-title">Key drivers</p>
+              <p>Academic pressure, internal psychological strain, and family environment emerged as dominant factors.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SYSTEM INTERPRETATION -->
+      <section class="annot-section compact" id="implications" data-section="System interpretation &amp; operational implications">
+        <span class="annot-label">System interpretation &amp; operational implications</span>
+        <div class="annot-body">
+          <div class="item">
+            <p class="item-title">Risk as a spectrum</p>
+            <p>Findings showed distributed levels of vulnerability, supporting tiered intervention approaches rather than binary classification.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Developmental effects</p>
+            <p>Higher risk in older cohorts suggested accumulating psychological strain, highlighting the importance of early intervention.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">Interacting drivers</p>
+            <p>Internal symptoms and external pressures emerged as interdependent factors, requiring coordinated responses beyond individual counselling.</p>
+          </div>
+          <div class="item">
+            <p class="item-title">From detection to system insight</p>
+            <p>The system surfaced broader stress patterns (e.g. workload, environment), enabling a shift from reactive support to preventative, system-level thinking.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESEARCH OUTPUTS -->
+      <section class="annot-section compact" id="outputs" data-section="Research outputs and delivery">
+        <span class="annot-label">Research outputs and delivery</span>
+        <div class="annot-body">
+          <div class="output-item">
+            <span class="output-num">01</span>
+            <p class="output-text">Self-administered online assessment platform, browser-based with mobile as supplementary access</p>
+          </div>
+          <div class="output-item">
+            <span class="output-num">02</span>
+            <p class="output-text">School-level analytical reporting and statistical analysis</p>
+          </div>
+          <div class="output-item">
+            <span class="output-num">03</span>
+            <p class="output-text">Stakeholder presentation of findings</p>
+          </div>
+          <div class="output-item">
+            <span class="output-num">04</span>
+            <p class="output-text">Individual student reports for targeted follow-up</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2026 Yuki Wang. All rights reserved.</p>
+  </footer>
+
+  <!-- TOC drawer (mobile) -->
+  <div class="toc-scrim" id="tocScrim"></div>
+  <div class="toc-drawer" id="tocDrawer" aria-hidden="true">
+    <div class="toc-drawer-handle"></div>
+    <p class="toc-drawer-reading">Now reading</p>
+    <ul class="toc-drawer-list" id="tocDrawerList">
+      <li><a href="#overview">Overview<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#context">Research context<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#objectives">Research objectives<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#instrument">Instrument design<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#data">Data collection<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#methods">Analysis &amp; methods<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#findings">Key findings<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#implications">System interpretation<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#outputs">Research outputs<div class="toc-drawer-dot"></div></a></li>
+    </ul>
+  </div>
+
+  <script>
+    /* ── Hamburger ── */
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const workToggle  = document.getElementById('workToggle');
+    const workSubmenu = document.getElementById('workSubmenu');
+
+    menuBtn.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      menuBtn.setAttribute('aria-expanded', open);
+      menuOverlay.setAttribute('aria-hidden', !open);
+      if (!open) { workSubmenu.classList.remove('open'); workToggle.classList.remove('open'); workToggle.setAttribute('aria-expanded', false); }
+    });
+    workToggle.addEventListener('click', () => {
+      const open = workSubmenu.classList.toggle('open');
+      workToggle.classList.toggle('open', open);
+      workToggle.setAttribute('aria-expanded', open);
+    });
+    document.querySelectorAll('.menu-overlay a').forEach(l => l.addEventListener('click', () => {
+      document.body.classList.remove('menu-open');
+      menuBtn.setAttribute('aria-expanded', false);
+      menuOverlay.setAttribute('aria-hidden', true);
+    }));
+    menuOverlay.addEventListener('click', e => {
+      if (e.target !== menuOverlay) return;
+      document.body.classList.remove('menu-open');
+      menuBtn.setAttribute('aria-expanded', false);
+      menuOverlay.setAttribute('aria-hidden', true);
+      workSubmenu.classList.remove('open'); workToggle.classList.remove('open'); workToggle.setAttribute('aria-expanded', false);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      if (document.body.classList.contains('menu-open')) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open'); workToggle.classList.remove('open'); workToggle.setAttribute('aria-expanded', false);
+        menuBtn.focus();
+      }
+    });
+
+    /* ── TOC drawer ── */
+    const tocBtn    = document.getElementById('tocBtn');
+    const tocDrawer = document.getElementById('tocDrawer');
+    const tocScrim  = document.getElementById('tocScrim');
+    const tocFill   = document.getElementById('tocProgressFill');
+
+    const openToc  = () => { tocDrawer.classList.add('open'); tocScrim.classList.add('open'); tocBtn.setAttribute('aria-expanded','true'); tocDrawer.setAttribute('aria-hidden','false'); };
+    const closeToc = () => { tocDrawer.classList.remove('open'); tocScrim.classList.remove('open'); tocBtn.setAttribute('aria-expanded','false'); tocDrawer.setAttribute('aria-hidden','true'); };
+
+    tocBtn.addEventListener('click', () => tocDrawer.classList.contains('open') ? closeToc() : openToc());
+    tocScrim.addEventListener('click', closeToc);
+    document.querySelectorAll('#tocDrawerList a').forEach(l => l.addEventListener('click', closeToc));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && tocDrawer.classList.contains('open')) closeToc(); });
+
+    /* ── Scroll progress ── */
+    window.addEventListener('scroll', () => {
+      const d = document.documentElement;
+      const total = d.scrollHeight - d.clientHeight;
+      tocFill.style.width = total > 0 ? (d.scrollTop / total * 100) + '%' : '0%';
+    }, { passive: true });
+
+    /* ── Active TOC links ── */
+    const tocLinks    = document.querySelectorAll('.toc-list a');
+    const drawerLinks = document.querySelectorAll('#tocDrawerList a');
+    const sections    = Array.from(document.querySelectorAll('main section[id]'));
+
+    function setActive() {
+      const trigger = window.scrollY + window.innerHeight * 0.22;
+      let cur = sections[0];
+      for (const s of sections) { if (s.getBoundingClientRect().top + window.scrollY <= trigger) cur = s; }
+      [...tocLinks, ...drawerLinks].forEach(l => l.classList.remove('active'));
+      document.querySelectorAll(`.toc-list a[href="#${cur.id}"], #tocDrawerList a[href="#${cur.id}"]`).forEach(l => l.classList.add('active'));
+    }
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
+
+    /* ── Floating section strip ── */
+    const secStrip     = document.getElementById('secStrip');
+    const secStripName = document.getElementById('secStripName');
+    const dataSecs     = Array.from(document.querySelectorAll('main [data-section]'));
+    const NAV_H        = 64;
+
+    function updateStrip() {
+      const sy = window.scrollY;
+      let cur = null;
+      for (const el of dataSecs) {
+        if (el.getBoundingClientRect().top + sy <= sy + NAV_H + 40) cur = el;
+      }
+      if (!cur) { secStrip.classList.remove('visible'); secStrip.setAttribute('aria-hidden','true'); return; }
+
+      /* show strip once the section's own annotation label has scrolled past nav */
+      const label = cur.querySelector('.annot-label');
+      const ref   = label || cur;
+      const refBottom = ref.getBoundingClientRect().bottom;
+
+      if (refBottom < NAV_H + 4) {
+        secStripName.textContent = cur.getAttribute('data-section');
+        secStrip.classList.add('visible');
+        secStrip.setAttribute('aria-hidden','false');
+      } else {
+        secStrip.classList.remove('visible');
+        secStrip.setAttribute('aria-hidden','true');
+      }
+    }
+    window.addEventListener('scroll', updateStrip, { passive: true });
+    updateStrip();
+  </script>
+</body>
+</html>

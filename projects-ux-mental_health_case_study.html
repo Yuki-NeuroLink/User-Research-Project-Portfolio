@@ -11,15 +11,15 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f5f2ec;
-      --surface: #ece9e2;
-      --surface-2: #f7f4ee;
-      --border: #d8d4ca;
+      --bg: #f0ede6;
+      --surface: #f7f5f0;
+      --surface-2: #f7f5f0;
+      --border: #ddd9d0;
       --text: #1a1a1a;
       --muted: #6b6860;
-      --accent: #2596be;
-      --accent-soft: #d9eef7;
-      --accent-deep: #1778a0;
+      --accent: #006080;
+      --accent-soft: #d6eaef;
+      --accent-deep: #004055;
       --nav-h: 64px;
       --shadow: 0 10px 30px rgba(26, 26, 26, 0.04);
       --radius-lg: 24px;
@@ -36,6 +36,7 @@
       line-height: 1.7;
     }
 
+        /* ── Navigation ── */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -43,42 +44,229 @@
       background: rgba(240, 237, 230, 0.94);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 clamp(1.5rem, 5vw, 3rem);
     }
 
-    nav .logo {
+    .logo {
+      font-family: 'Playfair Display', serif;
       font-size: 1.05rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
-      font-family: 'Playfair Display', serif;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 300;
     }
 
-    nav ul {
-      list-style: none;
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 300;
+    }
+
+    .nav-links {
       display: flex;
       gap: 2rem;
       align-items: center;
     }
 
-    nav ul a {
+    .nav-links a {
       font-family: 'Inter', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 0.70rem;
+      letter-spacing: 0.03em;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
     }
 
-    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
-    nav ul a:hover, nav ul a.active { color: var(--text); }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
 
-    nav ul a:hover, nav ul a.active { color: var(--text); }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger .bar {
+      width: 20px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ── Overlay menu ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1rem 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.0rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.2s;
+    }
+
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--accent); }
+
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 180px; }
+
+    .submenu a {
+      display: block;
+      padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid var(--border);
+      margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ── Contents button ── */
+    .toc-btn {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 0 10px;
+      height: 26px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .toc-btn-lines { display: flex; flex-direction: column; gap: 2.5px; }
+    .toc-btn-lines span { display: block; width: 9px; height: 1px; background: var(--muted); border-radius: 1px; }
+
+    .toc-drawer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 250;
+      background: #faf8f3;
+      border-top: 0.5px solid var(--border);
+      border-radius: 14px 14px 0 0;
+      padding: 0 clamp(1.5rem, 5vw, 2rem) 1.5rem;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      pointer-events: none;
+    }
+    .toc-drawer.open { transform: translateY(0); pointer-events: all; }
+
+    .toc-drawer-handle {
+      width: 32px; height: 3px; background: var(--border);
+      border-radius: 2px; margin: 10px auto 14px;
+    }
+    .toc-drawer-reading {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.02em;
+   color: #a09d97; margin-bottom: 8px;
+    }
+    .toc-drawer-list { list-style: none; }
+    .toc-drawer-list li { border-bottom: 0.5px solid #ebe7e0; }
+    .toc-drawer-list li:last-child { border-bottom: none; }
+    .toc-drawer-list a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .toc-drawer-list a:hover { color: var(--text); }
+    .toc-drawer-list a.active { color: var(--accent); }
+    .toc-drawer-dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent); opacity: 0;
+      transition: opacity 0.2s; flex-shrink: 0;
+    }
+    .toc-drawer-list a.active .toc-drawer-dot { opacity: 0.8; }
+
+    .toc-progress {
+      height: 1.5px; background: var(--border);
+      position: fixed; top: var(--nav-h); left: 0; right: 0;
+      z-index: 199; display: none;
+    }
+    .toc-progress-fill {
+      height: 100%; background: var(--accent);
+      opacity: 0.6; width: 0%; transition: width 0.1s linear;
+    }
+    .toc-scrim {
+      position: fixed; inset: 0; z-index: 240;
+      background: transparent; pointer-events: none;
+    }
+    .toc-scrim.open { pointer-events: all; }
+
+    /* ── Responsive nav ── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 1100px) {
+      .toc-btn { display: flex; }
+      .toc { display: none; }
+      .toc-progress { display: block; }
+    }
 
     .page-shell {
       max-width: calc(1320px + 6rem);
@@ -100,8 +288,7 @@
     .toc-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.72rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      letter-spacing: 0.02em;
       color: var(--muted);
       margin-bottom: 1.1rem;
     }
@@ -117,7 +304,7 @@
       position: relative;
       padding: 0.7rem 0 0.7rem 1rem;
       font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
+      font-size: 0.84rem;
       color: #a3a097;
       text-decoration: none;
       transition: color 0.22s ease, transform 0.22s ease;
@@ -161,8 +348,7 @@
     .section-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      letter-spacing: 0.02em;
       color: var(--muted);
       margin-bottom: 2.5rem;
       display: flex;
@@ -189,9 +375,8 @@
     .eyebrow {
       display: inline-block;
       font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      font-size: 0.70rem;
+      letter-spacing: 0.04em;
       color: var(--accent-deep);
       background: var(--accent-soft);
       padding: 0.35rem 0.75rem;
@@ -200,16 +385,17 @@
     }
 
     h1 {
-      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-size: clamp(2.1rem, 4.5vw, 3.8rem);
       line-height: 1.12;
       margin-bottom: 1rem;
       max-width: 12ch;
+      color: #004055;
     }
 
     .hero-intro {
       font-family: 'Inter', sans-serif;
-      font-size: 1.1rem;
-      line-height: 1.8;
+      font-size: 1.0rem;
+      line-height: 1.95;
       color: var(--muted);
       max-width: 58ch;
     }
@@ -224,9 +410,9 @@
 
     .card:hover {
       background: #fbfaf6;
-      border-color: rgba(37, 150, 190, 0.45);
+      border-color: rgba(0, 96, 128, 0.35);
       transform: translateY(-2px);
-      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
+      box-shadow: 0 14px 34px rgba(0, 64, 85, 0.08);
     }
 
     .at-a-glance {
@@ -236,8 +422,7 @@
     .card-label {
       font-family: 'Inter', sans-serif;
       font-size: 0.74rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      letter-spacing: 0.02em;
       color: var(--muted);
       margin-bottom: 1rem;
       position: relative;
@@ -281,10 +466,11 @@
 
     .fact-v {
       font-family: 'Inter', sans-serif;
-      font-size: 0.96rem;
+      font-size: 0.78rem;
       line-height: 1.5;
       color: var(--muted);
       font-weight: 400;
+      letter-spacing: 0.01em;
     }
 
     .problem-grid,
@@ -323,10 +509,10 @@
     .impact-item:hover,
     .method-card:hover,
     .before-after-card:hover {
-      border-color: rgba(37, 150, 190, 0.45);
+      border-color: rgba(0, 96, 128, 0.35);
       transform: translateY(-2px);
-      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
-      background: #fbfaf6;
+      box-shadow: 0 14px 34px rgba(0, 64, 85, 0.08);
+      background: #f7f5f0;
     }
 
     .mini-card::before,
@@ -373,21 +559,26 @@
     .reflection p,
     .bullet-list li {
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: var(--muted);
     }
 
     .section-heading {
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      line-height: 1.2;
-      margin: 0.4rem 0 1rem;
-      letter-spacing: -0.005em;
+      font-size: 0.93rem;
+      line-height: 1.75;
+      margin: 0.5rem 0 1.2rem;
+      letter-spacing: 0;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      max-width: 100%;
     }
 
     .body-copy {
-      font-size: 1rem;
-      line-height: 1.75;
-      max-width: 58ch;
+      font-size: 0.93rem;
+      line-height: 1.9;
+      max-width: 100%;
+      color: var(--muted);
     }
 
     .facts-grid > div {
@@ -411,10 +602,10 @@
 
     .method-card .decision-label {
       font-family: 'Playfair Display', serif;
-      font-size: 1.02rem;
+      font-size: 0.95rem;
       letter-spacing: 0;
       text-transform: none;
-      color: var(--text);
+      color: #004055;
       font-weight: 700;
       background: none !important;
       padding: 0;
@@ -424,20 +615,20 @@
 
     .method-card:hover .decision-label {
       background: none !important;
-      color: var(--text);
+      color: #004055;
     }
 
     .method-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      color: var(--text);
+      font-size: 0.95rem;
+      color: #004055;
       margin-bottom: 0.3rem;
       line-height: 1.3;
     }
 
     .method-body {
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: var(--muted);
       line-height: 1.65;
     }
@@ -459,23 +650,23 @@
     .decision-title,
     .impact-title {
       font-family: 'Playfair Display', serif;
-      color: var(--text);
+      color: #004055;
     }
 
     .what-title {
-      font-size: 1.18rem;
+      font-size: 0.95rem;
       margin-bottom: 0.35rem;
     }
 
     .insight-card {
-      padding: 1.5rem 1.5rem 1.5rem 1.65rem;
+      padding: 1.45rem 1.45rem 1.45rem 1.6rem;
       min-height: 180px;
     }
 
     .insight-title {
-      font-size: 1.28rem;
-      line-height: 1.25;
-      margin-bottom: 0.45rem;
+      font-size: 0.95rem;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
     }
 
     .decision-wrap {
@@ -491,8 +682,7 @@
       display: inline-block;
       font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
+      letter-spacing: 0.02em;
       color: #6b6860;
       font-weight: 600;
       margin-bottom: 0.9rem;
@@ -529,8 +719,7 @@
       display: block;
       font-family: 'Inter', sans-serif;
       font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.02em;
       color: var(--muted);
       margin-bottom: 0.45rem;
       background: none;
@@ -542,8 +731,8 @@
 
     .ba-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--text);
+      font-size: 0.98rem;
+      color: #004055;
       margin-bottom: 0.3rem;
       line-height: 1.3;
     }
@@ -562,14 +751,10 @@
     }
 
     .impact-section {
-      color: var(--text);
-      background: #F8DEC9;
-      color: white;
-      border-radius: 30px;
-      padding: 2rem;
+      background: transparent;
+      padding: 0;
       margin-bottom: 8rem;
       border: none;
-      box-shadow: var(--shadow);
       scroll-margin-top: calc(var(--nav-h) + 1.5rem);
     }
 
@@ -581,8 +766,7 @@
     }
 
     .impact-section .card-label,
-    .impact-section h2.section-heading,
-    .impact-item .impact-title {
+    .impact-section h2.section-heading {
       color: var(--text);
     }
 
@@ -592,14 +776,14 @@
     }
 
     .impact-item {
-      background: rgba(255,255,255,0.48);
+      background: var(--surface-2);
       border: 1px solid var(--border);
       padding: 1.2rem 1.2rem 1.2rem 1.35rem;
     }
 
     .impact-item:hover {
-      background: rgba(255,255,255,0.72);
-      border-color: rgba(37, 150, 190, 0.35);
+      background: #f7f5f0;
+      border-color: rgba(0, 96, 128, 0.35);
     }
 
     .impact-item::before {
@@ -608,15 +792,14 @@
 
     .impact-kicker {
       font-family: 'Inter', sans-serif;
-      font-size: 0.70rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      font-size: 0.74rem;
+      letter-spacing: 0.02em;
       color: var(--muted);
       margin-bottom: 0.45rem;
     }
 
     .impact-title {
-      font-size: 1.02rem;
+      font-size: 0.98rem;
       line-height: 1.4;
       margin-bottom: 0.32rem;
     }
@@ -653,15 +836,82 @@
     }
 
     .reflection-item:hover .reflection-bullet {
-      background: #2596be;
+      background: var(--accent);
     }
 
     .reflection-item p {
-      font-size: 1.02rem;
+      font-size: 1rem;
       line-height: 1.85;
       margin: 0;
       color: var(--muted);
       font-family: 'Inter', sans-serif;
+    }
+
+    /* ── Section headings ── */
+    .sec-heading-block {
+      margin-bottom: 1.5rem;
+    }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #006080;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-bottom: 0.4rem;
+    }
+
+    .sec-rule {
+      width: 28px;
+      height: 2px;
+      background: #006080;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Sticky section strip ── */
+    .sec-strip {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      z-index: 190;
+      background: rgba(240, 237, 230, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 6px clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      pointer-events: none;
+    }
+
+    .sec-strip.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .sec-strip-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #006080;
+      flex-shrink: 0;
+    }
+
+    .sec-strip-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #006080;
+      letter-spacing: 0.01em;
+    }
+
+    @media (max-width: 1100px) {
+      .page-shell { padding-top: calc(var(--nav-h) + 3.5rem + 28px); }
     }
 
     footer {
@@ -758,8 +1008,7 @@
       gap: 0.5rem;
       font-family: 'Inter', sans-serif;
       font-size: 0.74rem;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
+      letter-spacing: 0.02em;
       color: #a3a097;
       font-style: italic;
       text-decoration: none;
@@ -797,16 +1046,51 @@
   </style>
 </head>
 <body>
-  <a href="projects-ux.html" class="back-btn">Back to UX Projects</a>
+  <a href="projects-ux.html" class="back-btn">Back</a>
+    <!-- Nav -->
   <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
-    <ul>
-      <li><a href="about.html"   class="nav-small">About Me</a></li>
-      <li><a href="projects.html"    class="nav-small active">Work</a></li>
-      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
-      <li><a href="contact.html" class="nav-small">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="toc-btn" id="tocBtn" aria-label="Toggle contents" aria-expanded="false"><div class="toc-btn-lines"><span></span><span></span><span></span></div>Contents</button>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
   </nav>
+
+  <!-- Sticky section strip -->
+  <div class="sec-strip" id="secStrip" aria-hidden="true">
+    <div class="sec-strip-dot"></div>
+    <span class="sec-strip-name" id="secStripName"></span>
+  </div>
+
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="workToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="workSubmenu">
+          <a href="projects-ux.html" class="active">UX Strategy</a>
+          <a href="projects-research.html">Deep Research</a>
+        </div>
+      </li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
 
   <div class="page-shell">
     <aside class="toc">
@@ -829,7 +1113,7 @@
       <section class="hero" id="overview">
         <div>
           <h1>Mental Health Screening for Adolescents</h1>
-          <p class="hero-intro" style="font-family:'Inter',sans-serif; font-size: 1.02rem; line-height:1.8; color:var(--muted); max-width:52ch;">
+          <p class="hero-intro">
             Commissioned by a school board to build a mental health screening platform from scratch — I led research, design, testing, and reporting end to end.
           </p>
           <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.25rem;">
@@ -875,11 +1159,11 @@
         </aside>
       </section>
 
-      <section id="challenge">
-        <div>
-          <p class="card-label">The Challenge</p>
+      <section id="challenge" data-section="The Challenge" style="scroll-margin-top: calc(var(--nav-h) + 1.5rem);">
+        <div class="sec-heading-block">
+          <div class="sec-title">The Challenge</div>
+          <div class="sec-rule"></div>
           <h2 class="section-heading">Design a survey adolescents could understand, complete accurately, and respond to honestly.</h2>
-          <p class="body-copy">While delivering reliable screening data and actionable reports for schools.</p>
         </div>
         <div class="problem-grid" style="margin-top:2rem;">
           <div class="mini-card"><p>Wide variation in reading ability (ages 12–18)</p></div>
@@ -889,10 +1173,13 @@
         </div>
       </section>
 
-      <section class="decision-grid" id="methods">
+      <section class="decision-grid" id="methods" data-section="Methods">
         <div>
-          <p class="card-label">Methods</p>
-          <h2 class="section-heading">Revealing confusion through behaviour as well as self-report</h2>
+          <div class="sec-heading-block">
+            <div class="sec-title">Methods</div>
+            <div class="sec-rule"></div>
+            <h2 class="section-heading">Revealing confusion through behaviour as well as self-report</h2>
+          </div>
           <p class="body-copy">Because adolescents rarely articulate confusion, direct observation was combined with self-report to capture both behaviour and experience.</p>
         </div>
         <div class="methods-wrap">
@@ -919,10 +1206,13 @@
         </div>
       </section>
 
-      <section class="decision-grid" id="synthesis">
+      <section class="decision-grid" id="synthesis" data-section="Synthesis">
         <div>
-          <p class="card-label">Synthesis</p>
-          <h2 class="section-heading">From raw observation to patterns</h2>
+          <div class="sec-heading-block">
+            <div class="sec-title">Synthesis</div>
+            <div class="sec-rule"></div>
+            <h2 class="section-heading">From raw observation to patterns</h2>
+          </div>
           <p class="body-copy">After each round, notes were analysed independently — grouping themes, surfacing patterns, identifying variation across age groups. Analysis happened between every round, not just at the end.</p>
         </div>
         <div class="synthesis-wrap">
@@ -945,8 +1235,11 @@
         </div>
       </section>
 
-      <section id="insights">
-        <p class="card-label">Key Insights</p>
+      <section id="insights" data-section="Key Insights" style="scroll-margin-top: calc(var(--nav-h) + 1.5rem);">
+        <div class="sec-heading-block">
+          <div class="sec-title">Key Insights</div>
+          <div class="sec-rule"></div>
+        </div>
         <p class="body-copy" style="margin-bottom: 1.5rem;">Four patterns emerged consistently across participants and age groups — each one directly shaped a design decision.</p>
         <div class="insight-grid">
           <article class="insight-card">
@@ -968,10 +1261,13 @@
         </div>
       </section>
 
-      <section class="decision-grid" id="decisions">
+      <section class="decision-grid" id="decisions" data-section="Design Decisions">
         <div>
-          <p class="card-label">Design Decisions</p>
-          <h2 class="section-heading">Every change came from observed behaviour, not assumption.</h2>
+          <div class="sec-heading-block">
+            <div class="sec-title">Design Decisions</div>
+            <div class="sec-rule"></div>
+            <h2 class="section-heading">Every change came from observed behaviour, not assumption.</h2>
+          </div>
           <p class="body-copy">Each entry below names the behaviour that prompted the change.</p>
         </div>
 
@@ -1074,11 +1370,14 @@
         </div>
       </section>
 
-      <section class="impact-section" id="impact">
+      <section class="impact-section" id="impact" data-section="Impact">
         <div class="impact-layout">
           <div>
-            <p class="card-label">Impact</p>
-            <h2 class="section-heading">Adopted at scale. Screening time cut by two thirds.</h2>
+            <div class="sec-heading-block">
+              <div class="sec-title">Impact</div>
+              <div class="sec-rule"></div>
+              <h2 class="section-heading">Adopted at scale. Screening time cut by two thirds.</h2>
+            </div>
             <p class="body-copy">
               Iterative testing produced a platform stable enough to adopt at scale — no redesign needed after launch.
             </p>
@@ -1109,9 +1408,12 @@
         </div>
       </section>
 
-      <section class="reflection" id="reflection">
-        <p class="card-label">Reflection</p>
-        <h2 class="section-heading">What I would do differently</h2>
+      <section class="reflection" id="reflection" data-section="Reflection">
+        <div class="sec-heading-block">
+          <div class="sec-title">Reflection</div>
+          <div class="sec-rule"></div>
+          <h2 class="section-heading">What I would do differently</h2>
+        </div>
         <ul class="reflection-list">
           <li class="reflection-item">
             <span class="reflection-bullet"></span>
@@ -1128,22 +1430,183 @@
 
   <script>
     const tocLinks = document.querySelectorAll('.toc-list a');
-    const sections = document.querySelectorAll('main section[id], main .hero[id]');
+    const allSections = Array.from(document.querySelectorAll('main section[id], main .hero[id]'));
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          tocLinks.forEach((link) => link.classList.remove('active'));
-          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
-          if (active) active.classList.add('active');
-        }
-      });
-    }, {
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0.1,
+    function setActive() {
+      const trigger = window.scrollY + window.innerHeight * 0.25;
+      let current = allSections[0];
+      for (const s of allSections) {
+        if (s.getBoundingClientRect().top + window.scrollY <= trigger) current = s;
+      }
+      tocLinks.forEach(link => link.classList.remove('active'));
+      const active = document.querySelector(`.toc-list a[href="#${current.id}"]`);
+      if (active) active.classList.add('active');
+    }
+
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
+  </script>
+
+  <div class="toc-progress"><div class="toc-progress-fill" id="tocProgressFill"></div></div>
+  <div class="toc-scrim" id="tocScrim"></div>
+  <div class="toc-drawer" id="tocDrawer" aria-hidden="true">
+    <div class="toc-drawer-handle"></div>
+    <p class="toc-drawer-reading">Now reading</p>
+    <ul class="toc-drawer-list" id="tocDrawerList">
+      <li><a href="#overview">Overview<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#challenge">The Challenge<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#methods">Methods<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#synthesis">Synthesis<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#insights">Key Insights<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#decisions">Design Decisions<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#impact">Impact<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#reflection">Reflection<div class="toc-drawer-dot"></div></a></li>
+    </ul>
+  </div>
+
+  <script>
+    // ── Hamburger menu ──
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const workToggle  = document.getElementById('workToggle');
+    const workSubmenu = document.getElementById('workSubmenu');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      menuOverlay.setAttribute('aria-hidden', !isOpen);
+      if (!isOpen) {
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
     });
 
-    sections.forEach((section) => observer.observe(section));
+    workToggle.addEventListener('click', () => {
+      const isOpen = workSubmenu.classList.toggle('open');
+      workToggle.classList.toggle('open', isOpen);
+      workToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+      });
+    });
+
+    menuOverlay.addEventListener('click', (e) => {
+      if (e.target === menuOverlay) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+        menuBtn.focus();
+      }
+    });
+
+    // ── Contents drawer ──
+    const tocBtn      = document.getElementById('tocBtn');
+    const tocDrawer   = document.getElementById('tocDrawer');
+    const tocScrim    = document.getElementById('tocScrim');
+    const tocProgress = document.getElementById('tocProgressFill');
+    const drawerLinks = document.querySelectorAll('#tocDrawerList a');
+
+    function openToc() {
+      tocDrawer.classList.add('open');
+      tocScrim.classList.add('open');
+      tocBtn.setAttribute('aria-expanded', 'true');
+      tocDrawer.setAttribute('aria-hidden', 'false');
+    }
+    function closeToc() {
+      tocDrawer.classList.remove('open');
+      tocScrim.classList.remove('open');
+      tocBtn.setAttribute('aria-expanded', 'false');
+      tocDrawer.setAttribute('aria-hidden', 'true');
+    }
+
+    tocBtn.addEventListener('click', () => {
+      tocDrawer.classList.contains('open') ? closeToc() : openToc();
+    });
+    tocScrim.addEventListener('click', closeToc);
+    drawerLinks.forEach(link => link.addEventListener('click', closeToc));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && tocDrawer.classList.contains('open')) closeToc();
+    });
+
+    function setDrawerActive() {
+      const sections = Array.from(document.querySelectorAll('main section[id], main .hero[id]'));
+      const trigger = window.scrollY + window.innerHeight * 0.25;
+      let current = sections[0];
+      for (const s of sections) {
+        if (s.getBoundingClientRect().top + window.scrollY <= trigger) current = s;
+      }
+      drawerLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector('#tocDrawerList a[href="#' + current.id + '"]');
+      if (active) active.classList.add('active');
+    }
+
+    window.addEventListener('scroll', setDrawerActive, { passive: true });
+    setDrawerActive();
+
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - doc.clientHeight;
+      tocProgress.style.width = total > 0 ? (doc.scrollTop / total * 100) + '%' : '0%';
+    }, { passive: true });
+
+    // ── Sticky section strip ──
+    const secStrip     = document.getElementById('secStrip');
+    const secStripName = document.getElementById('secStripName');
+    const dataSections = Array.from(document.querySelectorAll('main [data-section]'));
+    const navH         = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 64;
+
+    function updateStrip() {
+      const scrollY   = window.scrollY;
+      const threshold = navH + 40;
+      let current     = null;
+
+      for (const el of dataSections) {
+        const top = el.getBoundingClientRect().top + scrollY;
+        if (scrollY + threshold >= top) current = el;
+      }
+
+      if (current) {
+        const headingBlock = current.querySelector('.sec-heading-block');
+        const headingBottom = headingBlock
+          ? headingBlock.getBoundingClientRect().bottom
+          : current.getBoundingClientRect().top + 80;
+
+        if (headingBottom < navH + 2) {
+          secStripName.textContent = current.getAttribute('data-section');
+          secStrip.classList.add('visible');
+          secStrip.setAttribute('aria-hidden', 'false');
+        } else {
+          secStrip.classList.remove('visible');
+          secStrip.setAttribute('aria-hidden', 'true');
+        }
+      } else {
+        secStrip.classList.remove('visible');
+        secStrip.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    window.addEventListener('scroll', updateStrip, { passive: true });
+    updateStrip();
   </script>
 
   <footer>

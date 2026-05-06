@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Design Studio — Yuki Wang</title>
+  <title>Writing — Yuki Wang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -209,14 +209,14 @@
 </head>
 <body>
 
-    <nav>
+  <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
     <div class="nav-right">
       <div class="nav-links">
         <a href="about.html">About</a>
         <a href="projects.html">Projects</a>
-        <a href="design.html" class="active">Design Studio</a>
-        <a href="writing.html">Writing</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html" class="active">Writing</a>
         <a href="contact.html">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -240,14 +240,14 @@
           <a href="projects-research.html">Deep Research</a>
         </div>
       </li>
-      <li><a href="design.html" class="active">Design Studio</a></li>
-      <li><a href="writing.html">Writing</a></li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html" class="active">Writing</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
 
   <div class="coming-soon">
-    <p class="eyebrow">Design Studio</p>
+    <p class="eyebrow">Writing</p>
     <h1>Coming<br><em>Soon.</em></h1>
     <p>Something is being crafted here. Check back shortly.</p>
   </div>
@@ -284,7 +284,6 @@
       });
     });
 
-    // Close menu when clicking the overlay background
     menuOverlay.addEventListener('click', (e) => {
       if (e.target === menuOverlay) {
         document.body.classList.remove('menu-open');
@@ -296,7 +295,6 @@
       }
     });
 
-    // Close menu on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
         document.body.classList.remove('menu-open');

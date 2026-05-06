@@ -6,19 +6,18 @@
   <title>Yuki Wang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #f0ede6;
-      --surface:  #ece9e2;
-      --border:   #d8d4ca;
-      --text:     #1a1a1a;
-      --muted:    #6b6860;
-      --accent:   #2596be;
-      --nav-h:    64px;
+      --bg:      #f0ede6;
+      --surface: #ece9e2;
+      --border:  #d8d4ca;
+      --text:    #1a1a1a;
+      --muted:   #6b6860;
+      --accent:  #2596be;
+      --nav-h:   64px;
     }
 
     html { scroll-behavior: smooth; }
@@ -30,7 +29,9 @@
       line-height: 1.7;
     }
 
-    /* ── Navigation ── */
+    /* ══════════════════════════════════════
+       NAV
+    ══════════════════════════════════════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -38,159 +39,462 @@
       background: rgba(240, 237, 230, 0.94);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 clamp(1.5rem, 5vw, 3rem);
     }
 
-    nav .logo {
+    .logo {
+      font-family: 'Playfair Display', serif;
       font-size: 1.05rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
-      font-family: 'Playfair Display', serif;
       color: var(--text);
       text-decoration: none;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 300;
     }
 
-    nav ul {
-      list-style: none;
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 300;
+    }
+
+    .nav-links {
       display: flex;
       gap: 2rem;
       align-items: center;
     }
 
-    nav ul a {
+    .nav-links a {
       font-family: 'Inter', sans-serif;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 0.70rem;
+      letter-spacing: 0.03em;
       color: var(--muted);
       text-decoration: none;
       transition: color 0.2s;
     }
 
-    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
-    nav ul a:hover { color: var(--text); }
+    .nav-links a:hover { color: var(--text); }
 
-    /* ── Sections ── */
-    section {
-      padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 5rem;
-      max-width: calc(780px + 6rem);
-      margin: 0 auto;
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
     }
 
-    section:not(:first-of-type) { padding-top: 5rem; }
+    .hamburger .bar {
+      width: 20px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
 
-    /* ── Hero ── */
-    #hero {
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ══════════════════════════════════════
+       OVERLAY MENU
+    ══════════════════════════════════════ */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1rem 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.0rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.2s;
+    }
+
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--accent); }
+
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 180px; }
+
+    .submenu a {
+      display: block;
+      padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid var(--border);
+      margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ══════════════════════════════════════
+       HERO
+    ══════════════════════════════════════ */
+    .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding-top: calc(var(--nav-h) + 3rem);
-      padding-bottom: 3rem;
+      padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      max-width: calc(780px + 6rem);
+      margin: 0 auto;
+      width: 100%;
     }
 
-    #hero h1 {
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
       font-size: clamp(3.2rem, 8vw, 5.8rem);
       font-weight: 900;
       line-height: 1.08;
       letter-spacing: -0.02em;
-      margin-bottom: 2.8rem;
-      font-family: 'Playfair Display', serif;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    #hero h1 .line  { display: block; }
-    #hero h1 .impact { color: var(--accent); font-style: italic; }
+    .hero-headline em { color: var(--accent); font-style: italic; }
 
-    .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-bottom {
+      padding-top: 1.8rem;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .bio-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .bio-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 44ch;
+      font-style: italic;
+    }
+
+    .action-col {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-width: 150px;
+    }
 
     .btn {
       font-family: 'Inter', sans-serif;
       font-size: 0.82rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
+      letter-spacing: 0.02em;
       padding: 0.75rem 1.6rem;
+      text-decoration: none;
+      display: block;
+      text-align: center;
       border-radius: 2px;
       transition: all 0.2s;
-      display: inline-block;
+      white-space: nowrap;
       cursor: pointer;
-      border: none;
     }
 
-    .btn-primary  { background: var(--text); color: #fff; }
-    .btn-primary:hover  { background: var(--accent); }
-    .btn-secondary { border: 1px solid var(--border); color: var(--text); background: transparent; }
-    .btn-secondary:hover { border-color: var(--muted); }
+    .btn-primary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { background: var(--accent); color: #fff; }
 
-    /* ── Section label ── */
-    .section-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+    .btn-secondary {
+      background: transparent;
       color: var(--muted);
-      margin-bottom: 3rem;
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+
+    .scroll-hint {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      gap: 0.45rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      color: #b0ada8;
+      margin-top: 1.8rem;
     }
 
-    .section-label::after {
+    .scroll-chevron {
+      width: 6px; height: 6px;
+      border-right: 1px solid #b0ada8;
+      border-bottom: 1px solid #b0ada8;
+      transform: rotate(45deg);
+      animation: bob 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50%       { transform: rotate(45deg) translateY(3px); }
+    }
+
+    /* ══════════════════════════════════════
+       WORK SECTION
+    ══════════════════════════════════════ */
+    .work-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem clamp(1.5rem, 5vw, 3rem);
+      max-width: calc(780px + 6rem);
+      margin: 0 auto;
+      width: 100%;
+      border-top: 1px solid var(--border);
+    }
+
+    .sec-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sec-label::after {
       content: '';
       flex: 1;
       height: 1px;
       background: var(--border);
     }
 
+    /* ── Cards grid ── */
+    .cards-wrap {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4.24rem;
+    }
+
     /* ══════════════════════════════════════
-       CONTACT
+       CARDS
     ══════════════════════════════════════ */
-    #contact { padding-bottom: 8rem; }
-
-    #contact .intro {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 48ch;
-      margin-bottom: 3rem;
-      line-height: 1.7;
+    .card-outer {
+      height: 252px;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.42s ease, box-shadow 0.42s ease, border-color 0.42s ease;
     }
 
-    .contact-form { max-width: 520px; }
-    .form-group   { margin-bottom: 1.4rem; }
-
-    label {
-      display: block;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.5rem;
+    .card-outer:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      border-color: rgba(37, 150, 190, 0.45);
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 0.8rem 1rem;
+    .card-track {
+      position: relative;
+      height: 100%;
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    .card-front *, .card-back * { text-decoration: none; }
+
+    .card-front {
+      border: 1px solid transparent;
+      border-top: 6px solid transparent;
+      opacity: 1;
+      transition: opacity 0.38s ease;
+    }
+
+    .card-back {
+      border: 1px solid transparent;
+      opacity: 0;
+      transition: opacity 0.38s ease;
+      padding: 1.1rem 1.2rem 1rem;
+      justify-content: space-between;
+    }
+
+    .card-outer:hover .card-front { opacity: 0; }
+    .card-outer:hover .card-back  { opacity: 1; }
+
+    .card-bar { display: none; }
+
+    .card-body {
+      padding: 1.2rem 1.1rem 0.95rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-tag {
       font-family: 'Inter', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.03em;
+      text-transform: none;
+      font-weight: 500;
+    }
+
+    .card-title-front {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.26rem, 1.62vw, 1.53rem);
+      font-weight: 700;
       color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      outline: none;
-      transition: border-color 0.2s;
-      resize: vertical;
+      line-height: 1.15;
+      flex: 1;
+      display: flex;
+      align-items: center;
     }
 
-    input:focus, textarea:focus { border-color: var(--accent); }
-    textarea { min-height: 130px; }
-    .form-submit { margin-top: 1.8rem; }
+    .card-arrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      white-space: nowrap;
+    }
 
-    /* ── Footer ── */
+    .card-back-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.90rem;
+      line-height: 1.65;
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-back-footer {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+    }
+
+    .card-back-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.05em;
+      opacity: 0.55;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    /* ── UX Strategy ── */
+    .card-ux { background: #f0f0f0; }
+    .card-ux .card-front { background: #f0f0f0; border-top-color: #006080; }
+    .card-ux .card-back  { background: #f0f0f0; }
+    .card-ux .card-tag   { color: #0e96c4; }
+    .card-ux .card-title-front { color: #006080; }
+    .card-ux .card-arrow { color: #0e96c4; }
+    .card-ux .card-back-desc  { color: #006080; }
+    .card-ux .card-back-title { color: #0e96c4; }
+
+    /* ── Deep Research ── */
+    .card-res { background: #f4e5cd; }
+    .card-res .card-front { background: #f4e5cd; border-top-color: #7a5a3a; }
+    .card-res .card-back  { background: #f4e5cd; }
+    .card-res .card-tag   { color: #9f5f23; }
+    .card-res .card-title-front { color: #6a3e16; }
+    .card-res .card-arrow { color: #9f5f23; }
+    .card-res .card-back-desc  { color: #6a3e16; }
+    .card-res .card-back-title { color: #9f5f23; }
+
+    /* ── Design Studio ── */
+    .card-ds { background: #3090b0; }
+    .card-ds .card-front { background: #3090b0; border-top-color: #e7970d; }
+    .card-ds .card-back  { background: #3090b0; }
+    .card-ds .card-tag   { color: #f2f2f2; }
+    .card-ds .card-title-front { color: #ffffff; }
+    .card-ds .card-arrow { color: #f2f2f2; }
+    .card-ds .card-back-desc  { color: #f2f2f2; }
+    .card-ds .card-back-title { color: #f2f2f2; }
+
+    /* ── Fade-in on scroll ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .cards-wrap .fade-in:nth-child(2) { transition-delay: 0.09s; }
+    .cards-wrap .fade-in:nth-child(3) { transition-delay: 0.18s; }
+
+    /* ══════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════ */
     footer {
       border-top: 1px solid var(--border);
       padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
@@ -203,40 +507,207 @@
       font-size: 0.78rem;
       color: var(--muted);
     }
+
+    /* ── Responsive ── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .work-section {
+        min-height: unset;
+        justify-content: flex-start;
+        padding: 3rem 1.5rem 4rem;
+      }
+      .cards-wrap {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .card-outer { height: 168px; }
+      .hero-bottom { grid-template-columns: 1fr; gap: 1.4rem; }
+      .action-col { flex-direction: row; min-width: 0; }
+      .btn { flex: 1; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Nav -->
   <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
-    <ul>
-      <li><a href="about.html"   class="nav-small">About Me</a></li>
-      <li><a href="projects.html"    class="nav-small">Work</a></li>
-      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
-      <li><a href="contact.html" class="nav-small">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
   </nav>
 
-  <!-- Hero -->
-  <section id="hero">
-    <h1>
-      <span class="line">Research.</span>
-      <span class="line">Design.</span>
-      <span class="line impact">Impact.</span>
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="workToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="workSubmenu">
+          <a href="projects-ux.html">UX Strategy</a>
+          <a href="projects-research.html">Deep Research</a>
+        </div>
+      </li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <h1 class="hero-headline">
+      Research.<br>
+      Design.<br>
+      <em>Impact.</em>
     </h1>
-    <div class="btn-group">
-      <a href="projects.html" class="btn btn-primary">View My Work</a>
-      <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+
+    <div class="hero-bottom">
+      <div>
+        <p class="bio-title">Utility, elevated by joy.</p>
+      </div>
+      <div class="action-col">
+        <a href="projects.html" class="btn btn-primary">View My Work</a>
+        <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-chevron"></div>
+      <span>scroll</span>
     </div>
   </section>
 
+  <!-- ── Work ── -->
+  <section class="work-section" id="work">
+    <div class="sec-label">Selected work</div>
+    <div class="cards-wrap">
 
+      <!-- UX Strategy -->
+      <div class="card-outer card-ux fade-in">
+        <div class="card-track">
+          <a href="projects-ux.html" class="card-front">
+            <div class="card-bar"></div>
+            <div class="card-body">
+              <div class="card-tag">Applied</div>
+              <div class="card-title-front">UX Strategy</div>
+              <span class="card-arrow">View →</span>
+            </div>
+          </a>
+          <a href="projects-ux.html" class="card-back">
+            <p class="card-back-desc">Studies where findings become applications.</p>
+            <div class="card-back-footer">
+              <span class="card-arrow">View →</span>
+              <span class="card-back-title">UX Strategy</span>
+            </div>
+          </a>
+        </div>
+      </div>
 
-  <!-- Footer -->
+      <!-- Deep Research -->
+      <div class="card-outer card-res fade-in">
+        <div class="card-track">
+          <a href="projects-research.html" class="card-front">
+            <div class="card-bar"></div>
+            <div class="card-body">
+              <div class="card-tag">Behavioural &amp; Physiological</div>
+              <div class="card-title-front">Deep Research</div>
+              <span class="card-arrow">View →</span>
+            </div>
+          </a>
+          <a href="projects-research.html" class="card-back">
+            <p class="card-back-desc">Understanding humans through behaviour and physiology.</p>
+            <div class="card-back-footer">
+              <span class="card-arrow">View →</span>
+              <span class="card-back-title">Deep Research</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Design Studio -->
+      <div class="card-outer card-ds fade-in">
+        <div class="card-track">
+          <a href="design.html" class="card-front">
+            <div class="card-bar"></div>
+            <div class="card-body">
+              <div class="card-tag">Building</div>
+              <div class="card-title-front">Design Studio</div>
+              <span class="card-arrow">View →</span>
+            </div>
+          </a>
+          <a href="design.html" class="card-back">
+            <p class="card-back-desc">Ideas given form — crafted with care.</p>
+            <div class="card-back-footer">
+              <span class="card-arrow">View →</span>
+              <span class="card-back-title">Design Studio</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <footer>
     <p>© 2026 Yuki Wang. All rights reserved.</p>
   </footer>
+
+  <script>
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const workToggle  = document.getElementById('workToggle');
+    const workSubmenu = document.getElementById('workSubmenu');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      menuOverlay.setAttribute('aria-hidden', !isOpen);
+      if (!isOpen) {
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    workToggle.addEventListener('click', () => {
+      const isOpen = workSubmenu.classList.toggle('open');
+      workToggle.classList.toggle('open', isOpen);
+      workToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+      });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>

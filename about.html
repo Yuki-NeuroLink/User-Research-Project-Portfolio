@@ -38,7 +38,7 @@
       background: rgba(240, 237, 230, 0.94);
       backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--border);
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -280,20 +280,114 @@
       font-size: 0.78rem;
       color: var(--muted);
     }
+
+    /* ── Hamburger nav ── */
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text); text-decoration: none;
+      letter-spacing: 0.01em; position: relative; z-index: 300;
+    }
+    .nav-right { display: flex; align-items: center; gap: 2rem; position: relative; z-index: 300; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-family: 'Inter', sans-serif; font-size: 0.70rem;
+      letter-spacing: 0.03em; color: var(--muted);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .hamburger {
+      display: flex; flex-direction: column; gap: 4.5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger .bar {
+      width: 20px; height: 1.5px; background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .menu-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 150;
+      display: flex; flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 1rem 0;
+      font-family: 'Inter', sans-serif; font-size: 1.0rem;
+      font-weight: 500; letter-spacing: 0.04em; color: var(--text);
+      text-decoration: none; background: none; border: none;
+      cursor: pointer; text-align: left; transition: color 0.2s;
+    }
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--accent); }
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease; flex-shrink: 0;
+    }
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 180px; }
+    .submenu a {
+      display: block; padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      color: var(--muted); text-decoration: none;
+      border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--accent); }
+    @media (max-width: 680px) { .nav-links { display: none; } }
   </style>
 </head>
 <body>
 
   <!-- Navigation -->
-  <nav>
+    <nav>
     <a href="index.html" class="logo">Yuki Wang</a>
-    <ul>
-      <li><a href="about.html"   class="nav-small active">About Me</a></li>
-      <li><a href="projects.html"    class="nav-small">Work</a></li>
-      <li><a href="design.html"  class="nav-small">Design Studio</a></li>
-      <li><a href="contact.html" class="nav-small">Contact</a></li>
-    </ul>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="about.html" class="active">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="design.html">Design Studio</a>
+        <a href="writing.html">Writing</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
   </nav>
+
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="about.html" class="active">About</a></li>
+      <li>
+        <button class="work-toggle" id="workToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="workSubmenu">
+          <a href="projects-ux.html">UX Strategy</a>
+          <a href="projects-research.html">Deep Research</a>
+        </div>
+      </li>
+      <li><a href="design.html">Design Studio</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
 
   <div class="page-content">
 
@@ -423,5 +517,58 @@
     <p>© 2026 Yuki Wang. All rights reserved.</p>
   </footer>
 
+  <script>
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const workToggle  = document.getElementById('workToggle');
+    const workSubmenu = document.getElementById('workSubmenu');
+    menuBtn.addEventListener('click', () => {
+      const isOpen = document.body.classList.toggle('menu-open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+      menuOverlay.setAttribute('aria-hidden', !isOpen);
+      if (!isOpen) {
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+    workToggle.addEventListener('click', () => {
+      const isOpen = workSubmenu.classList.toggle('open');
+      workToggle.classList.toggle('open', isOpen);
+      workToggle.setAttribute('aria-expanded', isOpen);
+    });
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+      });
+    });
+
+    // Close menu when clicking the overlay background
+    menuOverlay.addEventListener('click', (e) => {
+      if (e.target === menuOverlay) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+        document.body.classList.remove('menu-open');
+        menuBtn.setAttribute('aria-expanded', false);
+        menuOverlay.setAttribute('aria-hidden', true);
+        workSubmenu.classList.remove('open');
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+        menuBtn.focus();
+      }
+    });
+  </script>
 </body>
 </html>
