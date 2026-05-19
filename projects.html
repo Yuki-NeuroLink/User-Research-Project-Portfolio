@@ -205,8 +205,10 @@
     /* ── Cards grid ── */
     .cards-wrap {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 2rem;
+      max-width: 900px;
+      width: 100%;
     }
 
     /* ══════════════════════════════════════
@@ -348,15 +350,6 @@
     .card-res .card-back-desc  { color: #6a3e16; }
     .card-res .card-back-title { color: #9f5f23; }
 
-    /* ── Design Studio ── */
-    .card-ds { background: #3090b0; }
-    .card-ds .card-front { background: #3090b0; border-top-color: #e7970d; }
-    .card-ds .card-back  { background: #3090b0; }
-    .card-ds .card-tag   { color: #f2f2f2; }
-    .card-ds .card-title-front { color: #ffffff; }
-    .card-ds .card-arrow { color: #f2f2f2; }
-    .card-ds .card-back-desc  { color: #f2f2f2; }
-    .card-ds .card-back-title { color: #f2f2f2; }
 
     /* ── Fade-in on scroll ── */
     .fade-in {
@@ -411,7 +404,6 @@
         <a href="about.html">About</a>
         <a href="projects.html" class="active">Projects</a>
         <a href="design.html">Design Studio</a>
-        <a href="writing.html">Writing</a>
         <a href="contact.html">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -436,7 +428,6 @@
         </div>
       </li>
       <li><a href="design.html">Design Studio</a></li>
-      <li><a href="writing.html">Writing</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
@@ -488,26 +479,6 @@
         </div>
       </div>
 
-      <!-- Design Studio -->
-      <div class="card-outer card-ds fade-in">
-        <div class="card-track">
-          <a href="design.html" class="card-front">
-            <div class="card-bar"></div>
-            <div class="card-body">
-              <div class="card-tag">Building</div>
-              <div class="card-title-front">Design Studio</div>
-              <span class="card-arrow">View →</span>
-            </div>
-          </a>
-          <a href="design.html" class="card-back">
-            <p class="card-back-desc">Ideas given form — crafted with care.</p>
-            <div class="card-back-footer">
-              <span class="card-arrow">View →</span>
-              <span class="card-back-title">Design Studio</span>
-            </div>
-          </a>
-        </div>
-      </div>
 
     </div>
   </section>

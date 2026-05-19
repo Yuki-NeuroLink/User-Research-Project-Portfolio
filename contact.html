@@ -144,23 +144,37 @@
 
     .btn {
       font-family: 'Inter', sans-serif;
-      font-size: 0.82rem;
-      letter-spacing: 0.06em;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       text-decoration: none;
-      padding: 0.75rem 1.6rem;
+      padding: 0.72rem 1.45rem;
       border-radius: 2px;
-      transition: all 0.2s;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
       display: inline-block;
       cursor: pointer;
-      border: none;
+      border: 1px solid var(--border);
+      background: transparent;
     }
 
-    .btn-primary { background: var(--text); color: #fff; }
-    .btn-primary:hover { background: var(--accent); }
+    .btn-primary {
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .btn-primary:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: rgba(37, 150, 190, 0.04);
+      transform: translateY(-1px);
+    }
+
     .btn-primary:disabled {
-      background: var(--border);
+      color: #a3a097;
+      background: var(--surface);
+      border-color: var(--border);
       cursor: not-allowed;
+      transform: none;
     }
 
     /* ── Status messages ── */
@@ -278,7 +292,6 @@
         <a href="about.html">About</a>
         <a href="projects.html">Projects</a>
         <a href="design.html">Design Studio</a>
-        <a href="writing.html">Writing</a>
         <a href="contact.html" class="active">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -303,7 +316,6 @@
         </div>
       </li>
       <li><a href="design.html">Design Studio</a></li>
-      <li><a href="writing.html">Writing</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
     </ul>
   </div>
