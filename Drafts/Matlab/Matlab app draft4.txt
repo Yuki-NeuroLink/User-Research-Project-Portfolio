@@ -1,0 +1,6 @@
+## Changes to be made:
+- add labels under the Hero explanation;
+- Check the small screen on the phone:
+- When make sure there's a content bar visible on the phone, or a menu that's clickable;
+- make sure there's something indicating which part you are, while you are on the phone
+- perhaps a theme colour? I feel the text is drown when it's a small screen and nothing is highlighted

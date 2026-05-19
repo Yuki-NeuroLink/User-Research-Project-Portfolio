@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MATLAB App for Behavioural Experiments</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f2ec;
+      --surface: #ece9e2;
+      --surface-2: #f7f4ee;
+      --border: #d8d4ca;
+      --text: #1a1a1a;
+      --muted: #6b6860;
+      --accent: #2596be;
+      --accent-soft: #d9eef7;
+      --accent-deep: #1778a0;
+      --nav-h: 64px;
+      --shadow: 0 10px 30px rgba(26, 26, 26, 0.04);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --toc-w: 230px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Playfair Display', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240, 237, 230, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    nav .logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav ul a {
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav ul a.nav-small { font-size: 0.70rem; letter-spacing: 0.1em; }
+    nav ul a:hover, nav ul a.active { color: var(--text); }
+
+    .page-shell {
+      max-width: calc(1320px + 6rem);
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 4.5rem) clamp(1.5rem, 5vw, 3rem) 7rem;
+      display: grid;
+      grid-template-columns: var(--toc-w) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 2rem);
+      align-self: start;
+      padding-top: 0.3rem;
+    }
+
+    .toc-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      border-left: 1px solid var(--border);
+      padding-left: 0;
+    }
+
+    .toc-list a {
+      display: block;
+      position: relative;
+      padding: 0.7rem 0 0.7rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      color: #a3a097;
+      text-decoration: none;
+      transition: color 0.22s ease, transform 0.22s ease;
+    }
+
+    .toc-list a::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0.45rem;
+      bottom: 0.45rem;
+      width: 2px;
+      background: transparent;
+      transition: background 0.22s ease, width 0.22s ease;
+    }
+
+    .toc-list a:hover,
+    .toc-list a.active {
+      color: var(--text);
+      transform: translateX(3px);
+    }
+
+    .toc-list a:hover::before,
+    .toc-list a.active::before {
+      background: var(--accent);
+      width: 3px;
+    }
+
+    .page-content { min-width: 0; }
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 2rem;
+      align-items: end;
+      margin-bottom: 2.5rem;
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      background: var(--accent-soft);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      line-height: 1.12;
+      margin-bottom: 1rem;
+      max-width: 12ch;
+    }
+
+    .hero-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 58ch;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(37, 150, 190, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
+    }
+
+    .at-a-glance { padding: 1.5rem; }
+
+    .card-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      position: relative;
+      padding-top: 0.8rem;
+      transition: color 0.25s ease;
+    }
+
+    .card-label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 1px;
+      background: var(--border);
+      transition: background 0.25s ease, width 0.25s ease;
+    }
+
+    section:hover .card-label {
+      color: var(--accent);
+    }
+
+    section:hover .card-label::before {
+      background: var(--accent);
+      width: 60px;
+    }
+
+    .facts-grid,
+    .problem-grid,
+    .impact-grid,
+    .decision-grid,
+    .insight-grid,
+    .what-grid,
+    .challenge-grid,
+    .ba-grid,
+    .impact-layout {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .facts-grid { grid-template-columns: 1fr 1fr; gap: 1rem 1.2rem; }
+    .problem-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 4rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .challenge-grid { grid-template-columns: 0.92fr 1.08fr; margin-bottom: 4rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .insight-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 4rem; }
+    .decision-grid { grid-template-columns: 0.82fr 1.18fr; margin-bottom: 4rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+    .impact-grid { grid-template-columns: repeat(2, 1fr); }
+    .impact-layout { grid-template-columns: 0.9fr 1.1fr; align-items: start; }
+    .ba-grid { grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+
+    .mini-card,
+    .what-card,
+    .insight-card,
+    .impact-item,
+    .before-after-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      position: relative;
+    }
+
+    .mini-card:hover,
+    .what-card:hover,
+    .insight-card:hover,
+    .impact-item:hover,
+    .before-after-card:hover {
+      border-color: rgba(37, 150, 190, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(23, 120, 160, 0.08);
+      background: #fbfaf6;
+    }
+
+    .mini-card::before,
+    .what-card::before,
+    .insight-card::before,
+    .impact-item::before,
+    .before-after-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      bottom: 14px;
+      width: 0;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.22s ease, opacity 0.22s ease;
+      opacity: 0;
+    }
+
+    .mini-card:hover::before,
+    .what-card:hover::before,
+    .insight-card:hover::before,
+    .impact-item:hover::before,
+    .before-after-card:hover::before {
+      width: 3px;
+      opacity: 1;
+    }
+
+    .mini-card { padding: 1.35rem 1.35rem 1.35rem 1.5rem; min-height: 128px; }
+    .what-panel { padding: 1.6rem; }
+    .what-grid { margin-top: 0; }
+    .what-card { padding: 1.2rem 1.25rem 1.2rem 1.4rem; }
+    .insight-card { padding: 1.45rem 1.45rem 1.45rem 1.6rem; min-height: 200px; }
+    .before-after-card { padding: 1.3rem 1.3rem 1.3rem 1.45rem; }
+    .impact-item { background: rgba(255,255,255,0.48); border: 1px solid var(--border); padding: 1.2rem 1.2rem 1.2rem 1.35rem; }
+    .impact-item:hover { background: rgba(255,255,255,0.72); border-color: rgba(37, 150, 190, 0.35); }
+
+    .fact-k,
+    .fact-v,
+    .mini-card p,
+    .body-copy,
+    .what-card p,
+    .insight-card p,
+    .before-after-card p,
+    .impact-item p,
+    .reflection p,
+    .ba-label {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .fact-k { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.25rem; }
+    .fact-v { font-size: 0.96rem; line-height: 1.5; color: var(--text); font-weight: 500; }
+
+    .section-heading {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.2;
+      margin: 0.4rem 0 1rem;
+      letter-spacing: -0.005em;
+    }
+
+    .body-copy {
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: 56ch;
+      color: var(--muted);
+    }
+
+    .what-title,
+    .insight-title,
+    .impact-title,
+    .ba-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+    }
+
+    .what-title { font-size: 1.18rem; margin-bottom: 0.3rem; }
+    .what-card p,
+    .mini-card p,
+    .insight-card p,
+    .before-after-card p,
+    .impact-item p,
+    .reflection p { color: var(--muted); }
+
+    .insight-title {
+      font-size: 1.28rem;
+      line-height: 1.25;
+      margin-bottom: 0.45rem;
+    }
+
+    .decision-wrap { display: grid; gap: 1rem; }
+
+    .decision-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.9rem;
+    }
+
+    .ba-box {
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      min-height: 120px;
+    }
+
+    .before-box { background: #f3efe8; }
+    .after-box  { background: #eaf4f8; border-color: #d2e6ef; }
+
+    .ba-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .after-box .ba-label { color: var(--accent-deep); }
+    .ba-title { font-size: 1.1rem; margin-bottom: 0.3rem; line-height: 1.3; }
+
+    .impact-section {
+      background: #f8dec9;
+      border-radius: 30px;
+      padding: 2rem;
+      margin-bottom: 4rem;
+      border: none;
+      box-shadow: var(--shadow);
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .impact-section .card-label,
+    .impact-section h2.section-heading,
+    .impact-section .body-copy,
+    .impact-item .impact-title { color: var(--text); }
+
+    .impact-section .body-copy { color: var(--muted); max-width: 46ch; }
+    .impact-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .impact-title {
+      font-size: 1.02rem;
+      line-height: 1.4;
+      margin-bottom: 0.32rem;
+    }
+
+    .reflection {
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+      scroll-margin-top: calc(var(--nav-h) + 1.5rem);
+    }
+
+    .reflection p {
+      font-size: 1.02rem;
+      line-height: 1.85;
+      max-width: 56ch;
+      margin: 0 auto;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      justify-content: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .page-shell { grid-template-columns: 1fr; }
+      .toc {
+        position: static;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+      }
+      .toc-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem 1rem;
+        border-left: none;
+      }
+      .toc-list a { padding: 0.4rem 0; }
+      .toc-list a::before { display: none; }
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .challenge-grid,
+      .decision-grid,
+      .impact-layout,
+      .problem-grid,
+      .insight-grid,
+      .facts-grid,
+      .impact-grid,
+      .ba-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 { max-width: 100%; }
+    }
+
+    @media (max-width: 700px) {
+      nav ul { gap: 1rem; }
+      .page-shell { padding-top: calc(var(--nav-h) + 3.5rem); }
+      .mini-card,
+      .insight-card,
+      .what-card,
+      .before-after-card,
+      .impact-item,
+      .at-a-glance,
+      .what-panel,
+      .impact-section { padding: 1.2rem; }
+    }
+  
+    .impact-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 0.85rem;
+    }
+
+    @media (max-width: 980px) {
+      }
+
+      /* ── Back button ── */
+    .back-btn {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #a3a097;
+      font-style: italic;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, font-style 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeInBtn 0.5s ease 0.6s forwards;
+    }
+
+    .back-btn::before {
+      content: '←';
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--text);
+      font-style: normal;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .back-btn:hover::before {
+      transform: translateX(-3px);
+    }
+
+    @keyframes fadeInBtn {
+      to { opacity: 1; pointer-events: auto; }
+    }
+
+    @media (max-width: 700px) {
+      .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
+    }
+
+.methods-section { margin-bottom: 4rem; scroll-margin-top: calc(var(--nav-h) + 1.5rem); }
+</style>
+</head>
+<body>
+  <a href="projects-ux.html" class="back-btn">Back to UX Projects</a>
+<nav>
+<a class="logo" href="index.html">Yuki Wang</a>
+<ul>
+<li><a class="nav-small" href="about.html">About Me</a></li>
+<li><a class="nav-small active" href="projects.html">Work</a></li>
+<li><a class="nav-small" href="design.html">Design Studio</a></li>
+<li><a class="nav-small" href="contact.html">Contact</a></li>
+</ul>
+</nav>
+<div class="page-shell">
+<aside class="toc">
+<p class="toc-label">Contents</p>
+<ul class="toc-list">
+<li><a class="active" href="#overview">Overview</a></li>
+<li><a href="#methods">Methods</a></li>
+<li><a href="#challenge">The Challenge</a></li>
+<li><a href="#what-i-did">What I Did</a></li>
+<li><a href="#insights">Key Insights</a></li>
+<li><a href="#decisions">Design Decisions</a></li>
+<li><a href="#impact">Impact</a></li>
+<li><a href="#reflection">Reflection</a></li>
+</ul>
+</aside>
+<main class="page-content">
+<p class="section-label">UX Research Project</p>
+<section class="hero" id="overview">
+<div>
+<span class="eyebrow">UX + System Design</span>
+<h1>MATLAB App for Behavioural Experiments</h1>
+<p class="hero-intro">
+            Designing a touch-based experimental platform to run controlled studies, integrating audio and video stimuli, survey questions, instructions, countdown timing, and response recording.
+          </p>
+</div>
+<aside class="card at-a-glance">
+<p class="card-label">Overview</p>
+<div class="facts-grid">
+<div>
+<p class="fact-k">Role</p>
+<p class="fact-v">Lead Researcher &amp; Designer</p>
+</div>
+<div>
+<p class="fact-k">Users</p>
+<p class="fact-v">Participants (normal hearing) · Researchers</p>
+</div>
+<div>
+<p class="fact-k">Duration</p>
+<p class="fact-v">2 months</p>
+</div>
+<div>
+<p class="fact-k">Platform</p>
+<p class="fact-v">Computer with touch screen</p>
+</div>
+</div>
+</aside>
+</section>
+<section class="methods-section" id="methods"><div><p class="card-label">Methods</p></div><div class="problem-grid" style="margin-top:2rem;"><div class="mini-card"><p>Observational usability testing</p></div><div class="mini-card"><p>Task-based evaluation</p></div><div class="mini-card"><p>Participant interviews</p></div><div class="mini-card"><p>Iterative refinement</p></div></div></section>
+<section id="challenge">
+<div>
+<p class="card-label">The Challenge</p>
+<h2 class="section-heading">Design an app that supports uninterrupted long-duration experiments while maintaining participant comfort and data quality.</h2>
+</div>
+<div class="problem-grid" style="margin-top:2rem;">
+<div class="mini-card">
+<p>Interface was visually distracting and difficult to use</p>
+</div>
+<div class="mini-card">
+<p>Constant changes during the study broke flow and increased error</p>
+</div>
+<div class="mini-card">
+<p>Only one condition could run at a time</p>
+</div>
+<div class="mini-card">
+<p>Long sessions created uncertainty and fatigue</p>
+</div>
+</div>
+</section>
+<section class="challenge-grid" id="what-i-did">
+<div>
+<p class="card-label">What I Did</p>
+<h2 class="section-heading">What the app needed to do</h2>
+<p class="body-copy">
+            The full experimental flow was structured to support continuous sessions, clear interaction, and reliable data capture.
+          </p>
+</div>
+<div class="card what-panel">
+<div class="what-grid">
+<div class="what-card">
+<h3 class="what-title">Designed end-to-end experiment flow</h3>
+<p>One-hour study structured into sessions, conditions, breaks, and outputs.</p>
+</div>
+<div class="what-card">
+<h3 class="what-title">Refined touch interaction design</h3>
+<p>Larger touch targets and calmer visuals improved clarity and ease of interaction.</p>
+</div>
+<div class="what-card">
+<h3 class="what-title">Integrated experiment components</h3>
+<p>Speech tasks, surveys, breaks, and instructions combined in one system.</p>
+</div>
+<div class="what-card">
+<h3 class="what-title">Automated data logging</h3>
+<p>Responses, reaction time, and accuracy recorded in structured format.</p>
+</div>
+<div class="what-card">
+<h3 class="what-title">Controlled visual conditions</h3>
+<p>Consistent light levels maintained to protect physiological measurement.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="insights">
+<p class="card-label">Key Insights</p>
+<div class="insight-grid">
+<article class="insight-card">
+<h3 class="insight-title">Interface clarity reduces load</h3>
+<p>Interaction must not compete with task difficulty.</p>
+</article>
+<article class="insight-card">
+<h3 class="insight-title">Behaviour shows more than words</h3>
+<p>Hesitation revealed unclear interaction and instruction.</p>
+</article>
+<article class="insight-card">
+<h3 class="insight-title">Interruption affects data</h3>
+<p>Small disturbances can change experience and physiological response.</p>
+</article>
+<article class="insight-card">
+<h3 class="insight-title">Long sessions need pacing</h3>
+<p>Breaks and transitions were part of the design, not extras.</p>
+</article>
+</div>
+</section>
+<section class="decision-grid" id="decisions">
+<div>
+<p class="card-label">Design Decisions</p>
+<h2 class="section-heading">Design choices shaped by observation and interviews</h2>
+</div>
+<div class="decision-wrap">
+<div class="before-after-card">
+<p class="decision-label">Experiment Flow</p>
+<div class="ba-grid">
+<div class="ba-box before-box">
+<h4 class="ba-title">Manual switching during study</h4>
+<p>Constant changes during the study broke flow and increased error.</p>
+</div>
+<div class="ba-box after-box">
+<h4 class="ba-title">Automated progression across sessions</h4>
+<p>Continuous and standardised execution.</p>
+</div>
+</div>
+</div>
+<div class="before-after-card">
+<p class="decision-label">Break Timing</p>
+<div class="ba-grid">
+<div class="ba-box before-box">
+<h4 class="ba-title">Unclear waiting time during breaks</h4>
+<p>Participants did not know when the next part would begin.</p>
+</div>
+<div class="ba-box after-box">
+<h4 class="ba-title">Countdown with user-controlled continuation</h4>
+<p>Clear pacing and reduced uncertainty.</p>
+</div>
+</div>
+</div>
+<div class="before-after-card">
+<p class="decision-label">Video During Break</p>
+<div class="ba-grid">
+<div class="ba-box before-box">
+<h4 class="ba-title">Content could influence later response and physiology</h4>
+<p>Uncontrolled content risked affecting later measures.</p>
+</div>
+<div class="ba-box after-box">
+<h4 class="ba-title">Neutral video with no narration</h4>
+<p>Reduced emotional influence during breaks.</p>
+</div>
+</div>
+</div>
+<div class="before-after-card">
+<p class="decision-label">Screen / Background Design</p>
+<div class="ba-grid">
+<div class="ba-box before-box">
+<h4 class="ba-title">Screen with high contrast</h4>
+<p>Risked eliciting stronger emotion and affecting measurement, especially pupil diameter.</p>
+</div>
+<div class="ba-box after-box">
+<h4 class="ba-title">Calm background with controlled screen light</h4>
+<p>A calmer visual design was introduced, with screen light kept consistent and mild.</p>
+</div>
+</div>
+</div>
+<div class="before-after-card">
+<p class="decision-label">Interface Clarity</p>
+<div class="ba-grid">
+<div class="ba-box before-box">
+<h4 class="ba-title">Small targets and distracting layout</h4>
+<p>More effort required to find and select responses.</p>
+</div>
+<div class="ba-box after-box">
+<h4 class="ba-title">Larger elements and simplified interface</h4>
+<p>Reduced search time and cognitive load.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="impact-section" id="impact">
+<div class="impact-layout">
+<div>
+<p class="card-label">Impact</p>
+<h2 class="section-heading">Faster studies. Higher retention. More reliable data.</h2>
+</div>
+<div>
+<p class="impact-meta">Outcome</p>
+<div class="impact-grid">
+<div class="impact-item">
+<h3 class="impact-title">Reduced study time</h3>
+<p>Study duration reduced by around 50%, with sixty one-hour experiments completed in two months (typically four to five months).</p>
+</div>
+<div class="impact-item">
+<h3 class="impact-title">High retention, low dropout</h3>
+<p>Dropout rate reduced from 17% (expected) to 3% (only one dropout out of thirty participants).</p>
+</div>
+<div class="impact-item">
+<h3 class="impact-title">Uninterrupted sessions</h3>
+<p>One-hour experiments completed without intervention.</p>
+</div>
+<div class="impact-item">
+<h3 class="impact-title">Reduced workload and error</h3>
+<p>No manual adjustments required for complex components.</p>
+</div>
+<div class="impact-item">
+<h3 class="impact-title">More reliable data</h3>
+<p>Less emotional and physical disturbance during measurement.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="reflection" id="reflection">
+<p class="card-label">Reflection</p>
+<h2 class="section-heading">Reflection</h2>
+<p>
+          Real-session observation revealed issues not reported afterwards.
+          Immediate note organisation and hard-copy backup remained important in a digital workflow.
+        </p>
+</section>
+</main>
+</div>
+<script>
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    const sections = document.querySelectorAll('main section[id], main .hero[id]');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, {
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0.1,
+    });
+
+    sections.forEach((section) => observer.observe(section));
+  </script>
+<footer>
+<p>© 2026 Yuki Wang. All rights reserved.</p>
+</footer>
+</body>
+</html>

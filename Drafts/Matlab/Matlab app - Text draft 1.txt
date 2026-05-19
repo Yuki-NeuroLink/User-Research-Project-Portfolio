@@ -1,0 +1,251 @@
+My role:
+Lead researcher and designer;
+
+Participants: Anyone with normal hearing
+
+Duration: two months
+
+
+
+1. What experiments did this app support?
+It's used on a touch screen, not clicking with mouse;
+
+The core is speech in noise test; plus survey questions, and selecting a randomised order to decide how to present stimulus: sound and different SNR level, presenting video, audio; record data: reaction time, response, accuracy
+
+2. What were the biggest pain points before this tool?
+the interface was ugly. It's not pleasant to look at, buttons are wanky, colour and font looks very distracting. 
+It also can only support one single session with the same condition (SNR level),
+You need to manually make changes during the experiment if you want different SNR level, which disturbs the experiment for the participant, adds work and increasing error for the researcher;
+
+Why did this matter?
+After this is solved, the long experiment can run on its own from start to end. No need to disturb the participants (my aim is not to disturb them when we are measuring data from people, especially physiological data, for example, pupil diameter, skin conductance and heart rate would be easily affected by disturbance);
+Also, there's no need to manually change settings after every few minutes, reduced work dramatically for the researcher;
+Also reduce error rate without changing things manually;
+Better experience for participants, less drop off rate (we only had one of 60 experiments dropped out due to sickness, we planned at least 5. Also since the same person need to do the same experiment twice after one week, if they feel bad the first time, they might not coming back, which would make the data of the first one useless as well, since our aim is to analyse repeated experiments data);
+
+
+
+
+3. What made your app different from existing tools?
+Changed the interface to be more elegant;
+integrated the full experiment, which consists randomised stimulus presentation under preset condition, and plays video for break time, and messages about what comes next and what to do; and collecting data in an integrated way. 
+Also, since we use eye tracking to measure pupil diameter in another app, we made sure the light level is consistent when the presented window changes, as light would affect the measure of pupil diameter, such as from speech to noise test, to survey question, to video playing; , 
+
+4. Was it used by others or only you?
+this full one is used by only me. As it's a complicated experiment set for certain purpose only. But my supervisor said they would continue to use that since the design is very nice;
+
+5. What physiological data did it connect to?
+it's actually not connecting to physiological data collection, which was collected with BioPac
+
+6. What was the hardest part technically or conceptually?
+You need to imagine how this one-hour experiment should proceed in each step, to make sure it's smooth and also easily understandable for participants, so in short, planning the user route; the original core part only consists a few minutes;
+Also to make sure you need rest and break time; and something for participant to do for rest time; The material chosen need to be neutral (nature documentary with only music background, no human illustration)
+But also need to make sure that the data collected would be in a format that's easy to label and analyse;
+
+
+
+
+
+After designing everything, I need to test, and also watch others to test and refine;
+
+we had 10 participants for pilot study. I watched them doing the whole test, ask how they feel, watch what they do and click, see where they hesitate
+
+Changes made: I remembered:
+Made the touch box and texts bigger, some people struggle with small touch box;
+Made some instructions clearer, as they sometimes pause when the screen is not doing anything;
+Added counting down on the screen during breaks, so participants knows what's happening instead of thinking if the system is stuck;
+
+
+Reflection:
+Observing how participants actually interact with the app is very important. Since the experiment is quite long, they don't remember what they felt after the whole experiment finishes;
+Make sure to document and organise hand notes as soon as possible after you finish the experiment;     
+Even though the experiment is digital, everything is on the computer, to have a hard copy is still very important, as you don't know what might happen;
+
+
+
+
+
+
+
+
+
+
+2: integrate these two: ❌ “a MATLAB app”
+and 
+✅ “an end-to-end experimental system”; 
+People may not want to read anymore if you say “experimental setup"
+
+5: Why touch interface?
+It’s easier than clicking, as the button would be bigger, we have 50 boxes on the screen for participants to select 5, using mouse would be much more difficult;
+Also some people are left handed, they may be not using to standard mouse in their daily work;
+and some may not use mouse at all; touching is much easier to everyone;
+
+Why countdown timer? Because we ask participants to take breaks, long and short, after each session. If nothing is happening on the screen, they don’t know what to expect. even with the message says “break time” on the screen, they won’t know how long exactly left. For example, they may take some water, and the next part already started; or to avoid this, they might not move at all, which is not very good for an one-hour session;
+
+Why neutral video?
+So it won’t elicit strong emotions, which may affect how they perform the task, and would certainly affect physiological readings, like skin conductance for example. If they are scared or angry. it will go up, same as heart rate;
+
+Why larger buttons?
+Because it’s easier and faster for participants to find. Less cognitive load. They already need to listening hard and remember what they heard. We are not testing how good they are to find the buttons, we are testing if they could get the words correct from their listening
+
+
+
+
+
+
+
+1. How long was the full experiment?
+around one hour. depends on how fast or slow people do it. we give them flexible time for tasks and breaks, even with the count down on the screen, it only means they CAN continue, but they need to click the button to continue. So they can have a bit more time if they want;
+Mostly one hour
+2. How many conditions / SNR levels roughly?
+4 levels, break into 8 sessions (2 sessions for each level)
+
+3. What kind of responses?
+multiple choice?
+
+And a slider (from 0 to 100) for survey questions (2 of them after each session);
+
+4. Did the system automatically log everything into structured files?
+yes. I designed that way;
+
+5. Did you design the UI visually yourself? (fonts, layout, colours)
+yes. I mean I did with the help of AI, but I did everything;
+The stimulus is not mine though. The core part, speech, was recorded before, and the core test, like I said can only support one session, was already there; but the interface looks ugly. I changed that, and plus everything else are new
+
+
+
+
+============
+1. Title:
+Matlab app for behavioural Experiment
+
+2. The Challenge
+- Design a one-hour experiment that runs without interruption while protecting comfort and data quality
+change to:
+Design a one-hour experiment which consists different contents that runs without interruption while protecting comfort and data quality
+
+- "Manual changes broke flow and increased error."
+change to:
+"It needs to change manually to add different tests, which broke flow and increased error."
+
+"Manual switching interrupted sessions and increased error."
+change to:
+"Constant changes during study broke flow and increased error."
+And move this card to the third one.
+
+3. Key insights:
+"Behaviour shows confusion"
+change to:
+"Behaviour shows more than words."
+
+and move those two cards:
+"Interruption affects data
+Small disturbances can change experience and physiological response.
+and 
+"Long sessions need pacing
+Breaks and transitions were part of the design, not extras."
+
+back to the third and fourth;
+
+4. Design decisions:
+about "Break Experience" and "Break Content", although I understand what that is about, but I feel it might be confusing for others. Change the phrase.
+
+- INTERACTION METHOD
+
+- BEFORE
+Mouse-based input
+"Selection was slower and harder across dense layouts."
+change to 
+"INTERACTION METHOD
+
+- Mouse-based input
+"Selection was slower and harder across dense layouts."
+"Difficult for people with different hand or mouse preference."
+
+"Unclear waiting time" change to "Unclear waiting time when taking breaks."
+
+change "BREAK CONTENT"
+to
+"Video played during break."
+
+"Break content could influence later response and physiology."
+change to "Content could influence later response and physiology."
+
+And add:
+something about the screen/background design:
+before:
+Screen with high contrast, which risks elicit strong emotions and affect measurement (pupil diameter)
+after:
+Background changed to calm design, and ensure the light from screen consistent and mild.
+
+
+
+5. Impact:
+"Only 1 dropout out of 60 participants."
+change to "Only 1 dropout out of 60 participants (planned at least 5 drop outs based on experience)
+
+
+6 Reflection:
+"Real-session observation revealed issues that participants did not report afterwards. Immediate note organisation and hard-copy backup also remained important in a digital workflow."
+break to two sentences, and remove "also"
+"Real-session observation revealed issues that participants did not report afterwards."
+"Immediate note organisation and hard-copy backup remained important in a digital workflow."
+
+
+
+
+
+
+
+
+
+
+
+=======
+
+-
+overview add:
+platform: Computer with touch screen
+
+- remove:
+"It needs to change manually to add different tests, which broke flow and increased error."
+
+- "Reduced workload and error
+Manual adjustments removed."
+ change to "Reduced workload and error
+No manual adjustments needed for complex contents."
+
+- "More reliable data
+Reduced disturbance during measurement."
+change to 
+"More reliable data
+Reduced emotion and physical disturbance during measurement."'
+
+
+
+==================================================
+
+
+The Challenge
+The app should support long time experiment without interruption, while ensure comfort for users and data quality collected by researchers.
+and explain note:
+
+
+Design Decisions
+Design choices shaped by observation and interviews
+
+
+
+Impact:
+high return rate, low dropout rate
+Move the card
+"Improved retention
+Only 1 out of 30 participants dropped out (at least 5 dropouts were expected based on prior experience) for repeated session." 
+to the first card.
+
+
+
+
+Observation surfaced issues students would never report. 
+Next time: debrief with administering teachers after each round — they noticed things missed from the front of the room. 
+I'd also document synthesis more formally throughout, so reasoning could be shared with stakeholders as the project progressed.
