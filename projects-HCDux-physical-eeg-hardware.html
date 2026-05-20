@@ -99,6 +99,33 @@
   .submenu a:last-child { margin-bottom: 0.75rem; }
   .submenu a:hover, .submenu a.active { color: var(--text); border-color: var(--blue); }
 
+  .submenu.open { max-height: 380px; }
+  .submenu-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: calc(100% - 0.3rem); padding: 0.45rem 1rem 0.45rem 1rem;
+    font-family: var(--nav-sans, 'Inter', sans-serif); font-size: 0.82rem; color: var(--muted);
+    background: none; border: none; border-left: 2px solid var(--border);
+    margin-left: 0.3rem; cursor: pointer; text-align: left;
+    transition: color 0.2s, border-color 0.2s; box-sizing: border-box;
+  }
+  .submenu-toggle:hover, .submenu-toggle.open { color: var(--text, var(--ink)); border-color: var(--accent, var(--blue, var(--teal))); }
+  .chevron-sm {
+    width: 6px; height: 6px;
+    border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+    transform: rotate(45deg); transition: transform 0.25s ease; flex-shrink: 0; margin-right: 0.1rem;
+  }
+  .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+  .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .submenu2.open { max-height: 140px; }
+  .submenu2 a {
+    display: block; padding: 0.38rem 0 0.38rem 2rem;
+    font-family: var(--nav-sans, 'Inter', sans-serif); font-size: 0.76rem; color: var(--muted);
+    text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .submenu2 a:last-child { margin-bottom: 0.5rem; }
+  .submenu2 a:hover, .submenu2 a.active { color: var(--text, var(--ink)); border-color: var(--accent, var(--blue, var(--teal))); }
+
   /* ── PROGRESS BAR ── */
   .toc-progress {
     height: 1.5px; background: var(--border);
@@ -301,10 +328,9 @@
       Contents
     </button>
     <div class="nav-links">
-        <a href="about.html">About</a>
-        <a href="projects.html">Projects</a>
-        <a href="design.html" class="active">Design Studio</a>
-        <a href="contact.html">Contact</a>
+      <a href="about.html">About</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="contact.html">Contact</a>
     </div>
     <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
       <div class="bar"></div><div class="bar"></div><div class="bar"></div>
@@ -321,15 +347,19 @@
         Projects <div class="chevron-icon"></div>
       </button>
       <div class="submenu" id="workSubmenu">
-        <a href="projects-ux.html">UX Strategy</a>
+        <button class="submenu-toggle" id="hcdToggle" aria-expanded="false">
+          Human-centred &amp; UX Design <div class="chevron-sm"></div>
+        </button>
+        <div class="submenu2" id="hcdSubmenu">
+          <a href="projects-HCDux-digital.html">Digital &amp; UI</a>
+          <a href="design.html" class="active">Physical Design</a>
+        </div>
         <a href="projects-research.html">Deep Research</a>
       </div>
     </li>
-      <li><a href="design.html" class="active">Design Studio</a></li>
-      <li><a href="contact.html">Contact</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
 </div>
-
 <!-- PROGRESS BAR -->
 <div class="toc-progress"><div class="toc-progress-fill" id="tocProgressFill"></div></div>
 
@@ -510,12 +540,36 @@
   const menuOverlay = document.getElementById('menuOverlay');
   const workToggle  = document.getElementById('workToggle');
   const workSubmenu = document.getElementById('workSubmenu');
+    const hcdToggle   = document.getElementById('hcdToggle');
+    const hcdSubmenu  = document.getElementById('hcdSubmenu');
+
+    if (hcdToggle && hcdSubmenu) {
+      hcdToggle.addEventListener('click', () => {
+        const isOpen = hcdSubmenu.classList.toggle('open');
+        hcdToggle.classList.toggle('open', isOpen);
+        hcdToggle.setAttribute('aria-expanded', isOpen);
+      });
+    }
+
+    function closeProjectSubmenus() {
+      if (workSubmenu) workSubmenu.classList.remove('open');
+      if (workToggle) {
+        workToggle.classList.remove('open');
+        workToggle.setAttribute('aria-expanded', false);
+      }
+      if (hcdSubmenu) hcdSubmenu.classList.remove('open');
+      if (hcdToggle) {
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
+      }
+    }
+
 
   menuBtn.addEventListener('click', () => {
     const open = document.body.classList.toggle('menu-open');
     menuBtn.setAttribute('aria-expanded', open);
     menuOverlay.setAttribute('aria-hidden', !open);
-    if (!open) { workSubmenu.classList.remove('open'); workToggle.classList.remove('open'); workToggle.setAttribute('aria-expanded', false); }
+    if (!open) closeProjectSubmenus();
   });
   workToggle.addEventListener('click', () => {
     const open = workSubmenu.classList.toggle('open');
@@ -526,6 +580,7 @@
     document.body.classList.remove('menu-open');
     menuBtn.setAttribute('aria-expanded', false);
     menuOverlay.setAttribute('aria-hidden', true);
+    closeProjectSubmenus();
   }));
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
@@ -533,7 +588,7 @@
       document.body.classList.remove('menu-open');
       menuBtn.setAttribute('aria-expanded', false);
       menuOverlay.setAttribute('aria-hidden', true);
-      workSubmenu.classList.remove('open'); workToggle.classList.remove('open');
+      closeProjectSubmenus();
       menuBtn.focus();
     }
   });

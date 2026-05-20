@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects-UX — Yuki Wang</title>
+  <title>Digital &amp; UI — Yuki Wang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -350,7 +350,34 @@
     }
     .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
     .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
-    .submenu.open { max-height: 180px; }
+    .submenu.open { max-height: 380px; }
+    .submenu-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: calc(100% - 0.3rem); padding: 0.45rem 1rem 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--muted);
+      background: none; border: none; border-left: 2px solid var(--border);
+      margin-left: 0.3rem; cursor: pointer; text-align: left;
+      transition: color 0.2s, border-color 0.2s; box-sizing: border-box;
+    }
+    .submenu-toggle:hover { color: var(--text); border-color: var(--accent); }
+    .submenu-toggle.open  { color: var(--text); border-color: var(--accent); }
+    .chevron-sm {
+      width: 6px; height: 6px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease;
+      flex-shrink: 0; margin-right: 0.1rem;
+    }
+    .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+    .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu2.open { max-height: 120px; }
+    .submenu2 a {
+      display: block; padding: 0.38rem 0 0.38rem 2rem;
+      font-family: 'Inter', sans-serif; font-size: 0.76rem; color: var(--muted);
+      text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu2 a:last-child { margin-bottom: 0.5rem; }
+    .submenu2 a:hover { color: var(--text); border-color: var(--accent); }
     .submenu a {
       display: block; padding: 0.45rem 0 0.45rem 1rem;
       font-family: 'Inter', sans-serif; font-size: 0.82rem;
@@ -370,9 +397,9 @@
     <a href="index.html" class="logo">Yuki Wang</a>
     <div class="nav-right">
       <div class="nav-links">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="projects.html" class="active">Projects</a>
-        <a href="design.html">Design Studio</a>
         <a href="contact.html">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -383,35 +410,40 @@
     </div>
   </nav>
 
-  <!-- Overlay menu -->
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
     <ul class="overlay-list">
+      <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li>
-        <button class="work-toggle" id="workToggle" aria-expanded="false">
+        <button class="work-toggle" id="uxToggle" aria-expanded="false">
           Projects <div class="chevron-icon"></div>
         </button>
-        <div class="submenu" id="workSubmenu">
-          <a href="projects-ux.html" class="active">UX Strategy</a>
+        <div class="submenu" id="uxSubmenu">
+          <button class="submenu-toggle" id="hcdToggle" aria-expanded="false">
+            Human-centred &amp; UX Design <div class="chevron-sm"></div>
+          </button>
+          <div class="submenu2" id="hcdSubmenu">
+            <a href="projects-HCDux-digital.html" class="active">Digital &amp; UI</a>
+            <a href="projects-HCDux-physical.html">Physical Design</a>
+          </div>
           <a href="projects-research.html">Deep Research</a>
         </div>
       </li>
-      <li><a href="design.html">Design Studio</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
 
   <div class="page-content">
-    <p class="section-label">UX Research &amp; Design</p>
+    <p class="section-label">Human-centred &amp; UX Design</p>
 
     <section class="hero">
-      <h1>Selected <em>UX strategy</em><br>projects.</h1>
+      <h1>Selected <em>Digital &amp; UI</em><br>projects.</h1>
     </section>
 
     <section class="cards-grid">
 
       <!-- Card 1: Mental Health Screening -->
-      <a href="projects-ux-mental_health_case_study.html" class="project-card">
+      <a href="projects-HCDux-digital-mental_health_case_study.html" class="project-card">
         <div class="card-top">
           <div class="card-meta">
             <span class="card-tag">UX Research &amp; Design</span>
@@ -433,7 +465,7 @@
       </a>
 
       <!-- Card 2: MATLAB App -->
-      <a href="projects-ux-matlab_case_study.html" class="project-card">
+      <a href="projects-HCDux-digital-matlab_case_study.html" class="project-card">
         <div class="card-top">
           <div class="card-meta">
             <span class="card-tag">UX + System Design</span>
@@ -464,23 +496,42 @@
   <script>
     const menuBtn     = document.getElementById('menuBtn');
     const menuOverlay = document.getElementById('menuOverlay');
-    const workToggle  = document.getElementById('workToggle');
-    const workSubmenu = document.getElementById('workSubmenu');
+    const uxToggle    = document.getElementById('uxToggle');
+    const uxSubmenu   = document.getElementById('uxSubmenu');
+    const hcdToggle   = document.getElementById('hcdToggle');
+    const hcdSubmenu  = document.getElementById('hcdSubmenu');
+
     menuBtn.addEventListener('click', () => {
       const isOpen = document.body.classList.toggle('menu-open');
       menuBtn.setAttribute('aria-expanded', isOpen);
       menuOverlay.setAttribute('aria-hidden', !isOpen);
       if (!isOpen) {
-        workSubmenu.classList.remove('open');
-        workToggle.classList.remove('open');
-        workToggle.setAttribute('aria-expanded', false);
+        uxSubmenu.classList.remove('open');
+        uxToggle.classList.remove('open');
+        uxToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
       }
     });
-    workToggle.addEventListener('click', () => {
-      const isOpen = workSubmenu.classList.toggle('open');
-      workToggle.classList.toggle('open', isOpen);
-      workToggle.setAttribute('aria-expanded', isOpen);
+
+    uxToggle.addEventListener('click', () => {
+      const isOpen = uxSubmenu.classList.toggle('open');
+      uxToggle.classList.toggle('open', isOpen);
+      uxToggle.setAttribute('aria-expanded', isOpen);
+      if (!isOpen) {
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
+      }
     });
+
+    hcdToggle.addEventListener('click', () => {
+      const isOpen = hcdSubmenu.classList.toggle('open');
+      hcdToggle.classList.toggle('open', isOpen);
+      hcdToggle.setAttribute('aria-expanded', isOpen);
+    });
+
     document.querySelectorAll('.menu-overlay a').forEach(link => {
       link.addEventListener('click', () => {
         document.body.classList.remove('menu-open');
@@ -489,27 +540,31 @@
       });
     });
 
-    // Close menu when clicking the overlay background
     menuOverlay.addEventListener('click', (e) => {
       if (e.target === menuOverlay) {
         document.body.classList.remove('menu-open');
         menuBtn.setAttribute('aria-expanded', false);
         menuOverlay.setAttribute('aria-hidden', true);
-        workSubmenu.classList.remove('open');
-        workToggle.classList.remove('open');
-        workToggle.setAttribute('aria-expanded', false);
+        uxSubmenu.classList.remove('open');
+        uxToggle.classList.remove('open');
+        uxToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
       }
     });
 
-    // Close menu on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
         document.body.classList.remove('menu-open');
         menuBtn.setAttribute('aria-expanded', false);
         menuOverlay.setAttribute('aria-hidden', true);
-        workSubmenu.classList.remove('open');
-        workToggle.classList.remove('open');
-        workToggle.setAttribute('aria-expanded', false);
+        uxSubmenu.classList.remove('open');
+        uxToggle.classList.remove('open');
+        uxToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
         menuBtn.focus();
       }
     });

@@ -192,7 +192,6 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.75rem;
       letter-spacing: 0.14em;
-      text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 2.5rem;
       display: flex;
@@ -269,7 +268,6 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.72rem;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
       color: var(--res-tag);
     }
 
@@ -277,13 +275,44 @@
       font-family: 'Inter', sans-serif;
       font-size: 0.72rem;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
       color: var(--res-title);
       opacity: 0.6;
     }
 
+    .project-card--soon {
+      background: #f5f1eb;
+      border: 1px dashed #c8c0b2;
+      border-left: 2px dashed #c8c0b2;
+      opacity: 0.85;
+      cursor: default;
+    }
+
+    .project-card--soon:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: #c8c0b2;
+      border-left-color: #c8c0b2;
+      background: #f5f1eb;
+    }
+
+    .card-soon-blurb {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: #7a7570;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    .card-soon-small {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      color: #a3a097;
+      line-height: 1.5;
+    }
+
     .card-title {
-      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
       line-height: 1.18;
       font-weight: 900;
       margin-bottom: 0.9rem;
@@ -398,6 +427,42 @@
       .project-card { min-height: 260px; padding: 1.4rem; }
       .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
     }
+  
+    /* ── Nested project navigation ── */
+    .submenu.open { max-height: 420px; }
+    .submenu-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: calc(100% - 0.3rem); padding: 0.45rem 1rem 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--muted);
+      background: none; border: none; border-left: 2px solid var(--border);
+      margin-left: 0.3rem; cursor: pointer; text-align: left;
+      transition: color 0.2s, border-color 0.2s; box-sizing: border-box;
+    }
+    .submenu-toggle:hover, .submenu-toggle.open {
+      color: var(--text);
+      border-color: var(--res-tag, var(--accent));
+    }
+    .chevron-sm {
+      width: 6px; height: 6px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease;
+      flex-shrink: 0; margin-right: 0.1rem;
+    }
+    .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+    .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu2.open { max-height: 140px; }
+    .submenu2 a {
+      display: block; padding: 0.38rem 0 0.38rem 2rem;
+      font-family: 'Inter', sans-serif; font-size: 0.76rem; color: var(--muted);
+      text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu2 a:last-child { margin-bottom: 0.5rem; }
+    .submenu2 a:hover {
+      color: var(--text);
+      border-color: var(--res-tag, var(--accent));
+    }
+
   </style>
 </head>
 <body>
@@ -408,9 +473,9 @@
     <a href="index.html" class="logo">Yuki Wang</a>
     <div class="nav-right">
             <div class="nav-links">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="projects.html" class="active">Projects</a>
-        <a href="design.html">Design Studio</a>
         <a href="contact.html">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -424,23 +489,29 @@
   <!-- Overlay menu -->
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
     <ul class="overlay-list">
+      <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li>
         <button class="work-toggle" id="workToggle" aria-expanded="false">
           Projects <div class="chevron-icon"></div>
         </button>
         <div class="submenu" id="workSubmenu">
-          <a href="projects-ux.html">UX Strategy</a>
+          <button class="submenu-toggle" id="hcdToggle" aria-expanded="false">
+            Human-centred &amp; UX Design <div class="chevron-sm"></div>
+          </button>
+          <div class="submenu2" id="hcdSubmenu">
+            <a href="projects-HCDux-digital.html">Digital &amp; UI</a>
+            <a href="projects-HCDux-physical.html">Physical Design</a>
+          </div>
           <a href="projects-research.html" class="active">Deep Research</a>
         </div>
       </li>
-      <li><a href="design.html">Design Studio</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
 
   <div class="page-content">
-    <p class="section-label">Academic &amp; Applied Research</p>
+    <p class="section-label">Scientific research</p>
 
     <section class="hero">
       <h1>Selected <em>research</em><br>projects.</h1>
@@ -448,24 +519,36 @@
 
     <section class="cards-grid">
 
-      <!-- Card: Adolescent Mental Health Assessment -->
+      <!-- Card: Mental health screening -->
       <a href="projects-research-mental_health_case_study.html" class="project-card">
         <div class="card-top">
           <div class="card-meta">
-            <span class="card-tag">Psychology &amp; Assessment</span>
-            <span class="card-status">Featured project</span>
+            <span class="card-tag">Behavioural science</span>
           </div>
-          <h2 class="card-title">Adolescent Mental Health Assessment</h2>
+          <h2 class="card-title">Mental health screening and risk factor analysis</h2>
         </div>
         <div class="card-bottom">
           <div class="card-details">
             <span class="chip">Survey design</span>
             <span class="chip">Adolescents</span>
-            <span class="chip">1488 Participants</span>
+            <span class="chip">1488 participants</span>
           </div>
           <span class="card-link">View project</span>
         </div>
       </a>
+
+      <!-- Card: Behavioural & Physiology (coming soon) -->
+      <div class="project-card project-card--soon">
+        <div class="card-top">
+          <div class="card-meta">
+            <span class="card-tag">Physiology &amp; behaviour research</span>
+          </div>
+        </div>
+        <div class="card-bottom">
+          <p class="card-soon-blurb">Coming soon — this research is currently withheld pending publication.</p>
+          <p class="card-soon-small">This research is currently withheld pending academic publication. Full details will be made available upon release.</p>
+        </div>
+      </div>
 
     </section>
   </div>
@@ -479,6 +562,8 @@
     const menuOverlay = document.getElementById('menuOverlay');
     const workToggle  = document.getElementById('workToggle');
     const workSubmenu = document.getElementById('workSubmenu');
+    const hcdToggle   = document.getElementById('hcdToggle');
+    const hcdSubmenu  = document.getElementById('hcdSubmenu');
 
     menuBtn.addEventListener('click', () => {
       const isOpen = document.body.classList.toggle('menu-open');
@@ -488,6 +573,9 @@
         workSubmenu.classList.remove('open');
         workToggle.classList.remove('open');
         workToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
       }
     });
 
@@ -495,6 +583,17 @@
       const isOpen = workSubmenu.classList.toggle('open');
       workToggle.classList.toggle('open', isOpen);
       workToggle.setAttribute('aria-expanded', isOpen);
+      if (!isOpen) {
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    hcdToggle.addEventListener('click', () => {
+      const isOpen = hcdSubmenu.classList.toggle('open');
+      hcdToggle.classList.toggle('open', isOpen);
+      hcdToggle.setAttribute('aria-expanded', isOpen);
     });
 
     document.querySelectorAll('.menu-overlay a').forEach(link => {
@@ -514,6 +613,9 @@
         workSubmenu.classList.remove('open');
         workToggle.classList.remove('open');
         workToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
       }
     });
 
@@ -526,6 +628,9 @@
         workSubmenu.classList.remove('open');
         workToggle.classList.remove('open');
         workToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
         menuBtn.focus();
       }
     });

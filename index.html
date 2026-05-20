@@ -161,7 +161,7 @@
     .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
 
     .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
-    .submenu.open { max-height: 180px; }
+    .submenu.open { max-height: 380px; }
 
     .submenu a {
       display: block;
@@ -177,6 +177,60 @@
 
     .submenu a:last-child { margin-bottom: 0.75rem; }
     .submenu a:hover { color: var(--text); border-color: var(--accent); }
+
+    /* ── Nested submenu toggle (level 2) ── */
+    .submenu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: calc(100% - 0.3rem);
+      padding: 0.45rem 1rem 0.45rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-left: 2px solid var(--border);
+      margin-left: 0.3rem;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.2s, border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .submenu-toggle:hover { color: var(--text); border-color: var(--accent); }
+
+    .submenu-toggle.open { color: var(--text); border-color: var(--accent); }
+
+    .chevron-sm {
+      width: 6px; height: 6px;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+      margin-right: 0.1rem;
+    }
+
+    .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+
+    .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu2.open { max-height: 120px; }
+
+    .submenu2 a {
+      display: block;
+      padding: 0.38rem 0 0.38rem 2rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid var(--border);
+      margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .submenu2 a:last-child { margin-bottom: 0.5rem; }
+    .submenu2 a:hover { color: var(--text); border-color: var(--accent); }
 
     /* ══════════════════════════════════════
        HERO
@@ -328,8 +382,8 @@
     /* ── Cards grid ── */
     .cards-wrap {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 4.24rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
     }
 
     /* ══════════════════════════════════════
@@ -451,15 +505,16 @@
       white-space: nowrap;
     }
 
-    /* ── UX Strategy ── */
-    .card-ux { background: #f0f0f0; }
-    .card-ux .card-front { background: #f0f0f0; border-top-color: #006080; }
-    .card-ux .card-back  { background: #f0f0f0; }
-    .card-ux .card-tag   { color: #0e96c4; }
-    .card-ux .card-title-front { color: #006080; }
-    .card-ux .card-arrow { color: #0e96c4; }
-    .card-ux .card-back-desc  { color: #006080; }
-    .card-ux .card-back-title { color: #0e96c4; }
+    /* ── HCD & UX Design ── */
+    .card-ux { background: #f8fafc; }
+    .card-ux .card-front { background: #f8fafc; border-top-color: #2283A6; }
+    .card-ux .card-back  { background: #f8fafc; }
+    .card-ux .card-tag   { color: #2283A6; }
+    .card-ux .card-title-front { color: #0d3a4d; }
+    .card-ux .card-arrow { color: #2283A6; }
+    .card-ux .card-back-desc  { color: #0d3a4d; }
+    .card-ux .card-back-title { color: #2283A6; }
+    .card-ux .card-chip  { color: #2283A6; }
 
     /* ── Deep Research ── */
     .card-res { background: #f4e5cd; }
@@ -470,16 +525,26 @@
     .card-res .card-arrow { color: #9f5f23; }
     .card-res .card-back-desc  { color: #6a3e16; }
     .card-res .card-back-title { color: #9f5f23; }
+    .card-res .card-chip  { color: #7a5a3a; }
 
-    /* ── Design Studio ── */
-    .card-ds { background: #3090b0; }
-    .card-ds .card-front { background: #3090b0; border-top-color: #e7970d; }
-    .card-ds .card-back  { background: #3090b0; }
-    .card-ds .card-tag   { color: #f2f2f2; }
-    .card-ds .card-title-front { color: #ffffff; }
-    .card-ds .card-arrow { color: #f2f2f2; }
-    .card-ds .card-back-desc  { color: #f2f2f2; }
-    .card-ds .card-back-title { color: #f2f2f2; }
+    /* ── Card sub-chips ── */
+    .card-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: auto;
+      padding-top: 0.8rem;
+    }
+
+    .card-chip {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid currentColor;
+      opacity: 0.55;
+    }
 
     /* ── Fade-in on scroll ── */
     .fade-in {
@@ -520,7 +585,7 @@
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
-      .card-outer { height: 168px; }
+      .card-outer { height: 200px; }
       .hero-bottom { grid-template-columns: 1fr; gap: 1.4rem; }
       .action-col { flex-direction: row; min-width: 0; }
       .btn { flex: 1; }
@@ -534,9 +599,9 @@
     <a href="index.html" class="logo">Yuki Wang</a>
     <div class="nav-right">
       <div class="nav-links">
+        <a href="index.html">Home</a>
         <a href="about.html">About</a>
         <a href="projects.html">Projects</a>
-        <a href="design.html">Design Studio</a>
         <a href="contact.html">Contact</a>
       </div>
       <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
@@ -547,20 +612,25 @@
     </div>
   </nav>
 
-  <!-- Overlay menu -->
   <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
     <ul class="overlay-list">
+      <li><a href="index.html">Home</a></li>
       <li><a href="about.html">About</a></li>
       <li>
-        <button class="work-toggle" id="workToggle" aria-expanded="false">
+        <button class="work-toggle" id="uxToggle" aria-expanded="false">
           Projects <div class="chevron-icon"></div>
         </button>
-        <div class="submenu" id="workSubmenu">
-          <a href="projects-ux.html">UX Strategy</a>
+        <div class="submenu" id="uxSubmenu">
+          <button class="submenu-toggle" id="hcdToggle" aria-expanded="false">
+            Human-centred &amp; UX Design <div class="chevron-sm"></div>
+          </button>
+          <div class="submenu2" id="hcdSubmenu">
+            <a href="projects-HCDux-digital.html">Digital &amp; UI</a>
+            <a href="projects-HCDux-physical.html">Physical design</a>
+          </div>
           <a href="projects-research.html">Deep Research</a>
         </div>
       </li>
-      <li><a href="design.html">Design Studio</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </div>
@@ -594,22 +664,26 @@
     <div class="sec-label">Selected work</div>
     <div class="cards-wrap">
 
-      <!-- UX Strategy -->
+      <!-- Human-centred & UX Design -->
       <div class="card-outer card-ux fade-in">
         <div class="card-track">
-          <a href="projects-ux.html" class="card-front">
+          <a href="projects-HCDux.html" class="card-front">
             <div class="card-bar"></div>
             <div class="card-body">
-              <div class="card-tag">Applied</div>
-              <div class="card-title-front">UX Strategy</div>
-              <span class="card-arrow">View →</span>
+              <div class="card-tag">Human-centred</div>
+              <div class="card-title-front">Human-centred &amp; UX Design</div>
+              <div class="card-chips">
+                <span class="card-chip">Digital &amp; User Interface</span>
+                <span class="card-chip">Physical</span>
+              </div>
+              <span class="card-arrow" style="margin-top:0.7rem;">View →</span>
             </div>
           </a>
-          <a href="projects-ux.html" class="card-back">
-            <p class="card-back-desc">Studies where findings become applications.</p>
+          <a href="projects-HCDux.html" class="card-back">
+            <p class="card-back-desc">Digital interfaces and physical objects — designed around how people actually think and feel.</p>
             <div class="card-back-footer">
               <span class="card-arrow">View →</span>
-              <span class="card-back-title">UX Strategy</span>
+              <span class="card-back-title">Human-centred &amp; UX Design</span>
             </div>
           </a>
         </div>
@@ -623,35 +697,18 @@
             <div class="card-body">
               <div class="card-tag">Behavioural &amp; Physiological</div>
               <div class="card-title-front">Deep Research</div>
-              <span class="card-arrow">View →</span>
+              <div class="card-chips">
+                <span class="card-chip">Behaviour science</span>
+                <span class="card-chip">Psychophysiology</span>
+              </div>
+              <span class="card-arrow" style="margin-top:0.7rem;">View →</span>
             </div>
           </a>
           <a href="projects-research.html" class="card-back">
-            <p class="card-back-desc">Understanding humans through behaviour and physiology.</p>
+            <p class="card-back-desc">Understanding humans through behaviour and physiology — rigorous methods, meaningful findings.</p>
             <div class="card-back-footer">
               <span class="card-arrow">View →</span>
               <span class="card-back-title">Deep Research</span>
-            </div>
-          </a>
-        </div>
-      </div>
-
-      <!-- Design Studio -->
-      <div class="card-outer card-ds fade-in">
-        <div class="card-track">
-          <a href="design.html" class="card-front">
-            <div class="card-bar"></div>
-            <div class="card-body">
-              <div class="card-tag">Building</div>
-              <div class="card-title-front">Design Studio</div>
-              <span class="card-arrow">View →</span>
-            </div>
-          </a>
-          <a href="design.html" class="card-back">
-            <p class="card-back-desc">Ideas given form — crafted with care.</p>
-            <div class="card-back-footer">
-              <span class="card-arrow">View →</span>
-              <span class="card-back-title">Design Studio</span>
             </div>
           </a>
         </div>
@@ -667,24 +724,40 @@
   <script>
     const menuBtn     = document.getElementById('menuBtn');
     const menuOverlay = document.getElementById('menuOverlay');
-    const workToggle  = document.getElementById('workToggle');
-    const workSubmenu = document.getElementById('workSubmenu');
+    const uxToggle    = document.getElementById('uxToggle');
+    const uxSubmenu   = document.getElementById('uxSubmenu');
+    const hcdToggle   = document.getElementById('hcdToggle');
+    const hcdSubmenu  = document.getElementById('hcdSubmenu');
 
     menuBtn.addEventListener('click', () => {
       const isOpen = document.body.classList.toggle('menu-open');
       menuBtn.setAttribute('aria-expanded', isOpen);
       menuOverlay.setAttribute('aria-hidden', !isOpen);
       if (!isOpen) {
-        workSubmenu.classList.remove('open');
-        workToggle.classList.remove('open');
-        workToggle.setAttribute('aria-expanded', false);
+        uxSubmenu.classList.remove('open');
+        uxToggle.classList.remove('open');
+        uxToggle.setAttribute('aria-expanded', false);
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
       }
     });
 
-    workToggle.addEventListener('click', () => {
-      const isOpen = workSubmenu.classList.toggle('open');
-      workToggle.classList.toggle('open', isOpen);
-      workToggle.setAttribute('aria-expanded', isOpen);
+    uxToggle.addEventListener('click', () => {
+      const isOpen = uxSubmenu.classList.toggle('open');
+      uxToggle.classList.toggle('open', isOpen);
+      uxToggle.setAttribute('aria-expanded', isOpen);
+      if (!isOpen) {
+        hcdSubmenu.classList.remove('open');
+        hcdToggle.classList.remove('open');
+        hcdToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    hcdToggle.addEventListener('click', () => {
+      const isOpen = hcdSubmenu.classList.toggle('open');
+      hcdToggle.classList.toggle('open', isOpen);
+      hcdToggle.setAttribute('aria-expanded', isOpen);
     });
 
     document.querySelectorAll('.menu-overlay a').forEach(link => {
