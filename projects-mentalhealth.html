@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adolescent Mental Health Evaluation — Yuki Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f0ede6;
+      --border:      #ddd9d0;
+      --text:        #1a1a1a;
+      --muted:       #6b6860;
+      --accent:      #2596be;
+      --nav-h:       64px;
+      --toc-w:       220px;
+      --res-bg:      #faf1e4;
+      --res-top:     #7a5a3a;
+      --res-tag:     #9f5f23;
+      --res-title:   #6a3e16;
+      --res-chip-bg: #eedcc0;
+      --res-chip-bd: #d9bc97;
+      --res-deep:    #3a1f00;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Playfair Display', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Nav ── */
+    body > nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240, 237, 230, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 300;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      position: relative;
+      z-index: 300;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger .bar {
+      width: 20px;
+      height: 1.5px;
+      background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ── Overlay menu ── */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1rem 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.0rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: color 0.2s;
+    }
+
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--res-tag); }
+
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted);
+      border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 420px; }
+
+    .submenu a {
+      display: block;
+      padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      border-left: 2px solid var(--border);
+      margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--res-tag); }
+
+    .submenu-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: calc(100% - 0.3rem); padding: 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--muted);
+      background: none; border: none; border-left: 2px solid var(--border);
+      margin-left: 0.3rem; cursor: pointer; text-align: left;
+      transition: color 0.2s, border-color 0.2s; box-sizing: border-box;
+    }
+    .submenu-toggle:hover, .submenu-toggle.open { color: var(--text); border-color: var(--res-tag); }
+
+    .chevron-sm {
+      width: 6px; height: 6px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease;
+      flex-shrink: 0; margin-right: 0.1rem;
+    }
+    .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+
+    .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu2.open { max-height: 140px; }
+    .submenu2 a {
+      display: block; padding: 0.38rem 0 0.38rem 2rem;
+      font-family: 'Inter', sans-serif; font-size: 0.76rem; color: var(--muted);
+      text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu2 a:last-child { margin-bottom: 0.5rem; }
+    .submenu2 a:hover { color: var(--text); border-color: var(--res-tag); }
+
+    /* ── Page layout ── */
+    .page-shell {
+      max-width: calc(1160px + 6rem);
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 7rem;
+      display: grid;
+      grid-template-columns: var(--toc-w) minmax(0, 1fr);
+      gap: 0 3rem;
+      align-items: start;
+    }
+
+    .page-content { min-width: 0; }
+
+    .toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 2.5rem);
+      align-self: start;
+      padding: 0.25rem 0 0.25rem 0;
+    }
+
+    .toc-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--res-tag);
+      margin-bottom: 1.25rem;
+      padding-left: 1.1rem;
+    }
+
+    .toc-list {
+      list-style: none;
+      border-left: 1px solid var(--res-chip-bd);
+      counter-reset: toc;
+    }
+
+    .toc-list li { counter-increment: toc; }
+
+    .toc-list a {
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: 0.55rem;
+      align-items: baseline;
+      position: relative;
+      padding: 0.6rem 0 0.6rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      color: #8f8a82;
+      text-decoration: none;
+      transition: color 0.22s ease, transform 0.22s ease;
+    }
+
+    .toc-list a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.78rem;
+      color: var(--res-chip-bd);
+      font-weight: 700;
+      transition: color 0.22s ease;
+    }
+
+    .toc-list a::after {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0.38rem;
+      bottom: 0.38rem;
+      width: 2px;
+      background: transparent;
+      transition: background 0.22s ease, width 0.22s ease;
+    }
+
+    .toc-list a:hover,
+    .toc-list a.active {
+      color: var(--res-title);
+      transform: translateX(3px);
+    }
+
+    .toc-list a:hover::before,
+    .toc-list a.active::before { color: var(--res-tag); }
+
+    .toc-list a:hover::after,
+    .toc-list a.active::after {
+      background: var(--res-tag);
+      width: 3px;
+    }
+
+    .toc-btn {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      height: 26px;
+      padding: 0 10px;
+      border-radius: 12px;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .toc-btn-lines { display: flex; flex-direction: column; gap: 2.5px; }
+    .toc-btn-lines span { display: block; width: 9px; height: 1px; background: var(--muted); border-radius: 1px; }
+
+    .toc-progress {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      height: 1.5px;
+      background: var(--border);
+      z-index: 199;
+    }
+
+    .toc-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--res-tag);
+      opacity: 0.65;
+      transition: width 0.1s linear;
+    }
+
+    .toc-scrim { position: fixed; inset: 0; z-index: 240; background: transparent; pointer-events: none; }
+    .toc-scrim.open { pointer-events: all; }
+
+    .toc-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 250;
+      background: var(--res-bg);
+      border-top: 0.5px solid var(--border);
+      border-radius: 14px 14px 0 0;
+      padding: 0 clamp(1.5rem, 5vw, 2rem) 2rem;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      pointer-events: none;
+    }
+
+    .toc-drawer.open { transform: translateY(0); pointer-events: all; }
+    .toc-drawer-handle { width: 32px; height: 3px; background: var(--border); border-radius: 2px; margin: 10px auto 14px; }
+    .toc-drawer-reading { font-family: 'Inter', sans-serif; font-size: 0.62rem; color: #a09d97; margin-bottom: 8px; }
+    .toc-drawer-list { list-style: none; }
+    .toc-drawer-list li { border-bottom: 0.5px solid #ebe7e0; }
+    .toc-drawer-list li:last-child { border-bottom: none; }
+    .toc-drawer-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .toc-drawer-list a:hover,
+    .toc-drawer-list a.active { color: var(--res-tag); }
+    .toc-drawer-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--res-tag); opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+    .toc-drawer-list a.active .toc-drawer-dot { opacity: 0.8; }
+
+    /* ── Section label ── */
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 4.5rem;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--res-title);
+      background: var(--res-chip-bg);
+      border: 1px solid var(--res-chip-bd);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3.6vw, 2.56rem);
+      font-weight: 900;
+      color: var(--res-deep);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      max-width: 16ch;
+    }
+
+    /* ── Sec rule row ── */
+    .sec-rule-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.45rem;
+    }
+    .sec-tag {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.45rem, 2.9vw, 1.95rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--res-title);
+      white-space: normal;
+    }
+    .sec-rule { flex: 1; height: 1px; background: var(--res-chip-bd); }
+
+    /* ── Sections ── */
+    .section { margin-bottom: 6.75rem; }
+
+    .intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 1.25rem;
+      max-width: 62ch;
+    }
+
+    /* ── Bullet list ── */
+    .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .bullet-list li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+    }
+    .bullet-list li::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--res-tag);
+      flex-shrink: 0;
+      margin-top: 0.52em;
+    }
+
+    .role-blocks {
+      display: flex;
+      flex-direction: column;
+      gap: 2.1rem;
+      margin-top: 1.45rem;
+    }
+
+    .role-block {
+      display: grid;
+      grid-template-columns: minmax(190px, 0.72fr) minmax(0, 1.35fr);
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 1.9rem;
+      border-bottom: 1px dashed var(--res-chip-bd);
+    }
+
+    .role-block:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .role-heading {
+      display: flex;
+      gap: 0.75rem;
+      align-items: baseline;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .role-heading::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--res-tag);
+      flex: 0 0 auto;
+      margin-top: 0.65em;
+    }
+
+    .role-heading strong {
+      color: var(--res-deep);
+      font-weight: 600;
+    }
+
+    .role-tasks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      padding-left: 1.2rem;
+      border-left: 1px solid var(--res-chip-bd);
+    }
+
+    .role-tasks li {
+      position: relative;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .role-tasks li::before {
+      content: '';
+      position: absolute;
+      left: -1.35rem;
+      top: 0.72em;
+      width: 0.5rem;
+      height: 1px;
+      background: var(--res-chip-bd);
+    }
+
+    /* ── Role label ── */
+    .role-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      color: var(--res-title);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+    }
+
+    /* ── Metrics — editorial list ── */
+    .metric-list { display: flex; flex-direction: column; gap: 0.6rem; }
+    .metric-line {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+    }
+    .metric-line-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--res-tag);
+      white-space: nowrap;
+    }
+    .metric-line-label { font-family: 'Inter', sans-serif; color: var(--muted); }
+
+    /* ── How it worked intro ── */
+    .how-intro {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+      max-width: 62ch;
+    }
+
+    /* ── Project cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: #fef9f3;
+      border: 1px solid var(--res-chip-bd);
+      border-left: 4px solid transparent;
+      border-radius: 16px;
+      padding: 1.75rem;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, border-left-color 0.22s ease, background 0.22s ease, filter 0.22s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(122, 90, 58, 0.12);
+      border-color: var(--res-chip-bd);
+      border-left-color: var(--res-top);
+      background: #fdf6ec;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .card-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--res-tag);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      line-height: 1.18;
+      font-weight: 900;
+      margin-bottom: 0.65rem;
+      letter-spacing: -0.01em;
+      color: var(--res-deep);
+    }
+
+    .card-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      color: #a8967e;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .card-link::after {
+      content: '→';
+      transition: transform 0.2s ease;
+    }
+
+    .project-card:hover .card-link { color: var(--res-top); }
+    .project-card:hover .card-link::after { transform: translateX(4px); }
+
+    /* ── Card 1 override: teal/data palette from research page ── */
+    .card-first {
+      background: #f5f5f5;
+      border-color: #1b7898;
+      border-left-color: transparent;
+    }
+    .card-first:hover {
+      background: #f5f5f5;
+      border-color: #1b7898;
+      border-left-color: #1b7898;
+      box-shadow: 0 10px 28px rgba(27, 120, 152, 0.10);
+      filter: brightness(1.06);
+    }
+    .card-first .card-tag   { color: #2492b7; }
+    .card-first .card-title { color: #0f6480; }
+    .card-first .card-body  { color: #0f6480; }
+    .card-first .card-link  { color: #8c8c8c; }
+    .card-first:hover .card-link { color: #1b7898; }
+
+    /* ── Back button ── */
+    .back-btn {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 200;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.02em;
+      color: #a3a097;
+      font-style: italic;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeInBtn 0.5s ease 0.6s forwards;
+    }
+
+    .back-btn::before {
+      content: '←';
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--text);
+      font-style: normal;
+      border-color: var(--res-tag);
+      transform: translateY(-2px);
+    }
+
+    .back-btn:hover::before { transform: translateX(-3px); }
+
+    @keyframes fadeInBtn { to { opacity: 1; pointer-events: auto; } }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      justify-content: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+
+
+    /* ── Clean desktop contents navigation ── */
+    .page-shell > .toc {
+      position: sticky;
+      top: calc(var(--nav-h) + 2.5rem);
+      align-self: start;
+      width: var(--toc-w);
+      height: auto;
+      display: block;
+      padding: 0.35rem 0 0.35rem 0;
+      background: var(--bg);
+      border: 0;
+      z-index: 20;
+      backdrop-filter: none;
+      box-shadow: -24px 0 0 var(--bg), 24px 0 0 var(--bg);
+    }
+
+    .page-shell > .toc::before,
+    .page-shell > .toc::after {
+      content: none;
+      display: none;
+    }
+
+    .page-shell > .toc .toc-label {
+      display: block;
+      padding-left: 0;
+      margin: 0 0 1.15rem 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      font-weight: 600;
+      letter-spacing: 0.26em;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: var(--res-tag);
+    }
+
+    .page-shell > .toc .toc-list {
+      position: relative;
+      list-style: none;
+      border-left: 0;
+      padding: 0 0 0 2.35rem;
+      margin: 0;
+      counter-reset: toc;
+    }
+
+    .page-shell > .toc .toc-list::before {
+      content: '';
+      position: absolute;
+      left: 0.35rem;
+      top: 0.25rem;
+      bottom: 0.25rem;
+      width: 1px;
+      background: rgba(159, 95, 35, 0.30);
+    }
+
+    .page-shell > .toc .toc-list li {
+      counter-increment: toc;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-shell > .toc .toc-list a {
+      display: grid;
+      grid-template-columns: 2.75rem minmax(0, 1fr);
+      gap: 1.05rem;
+      align-items: baseline;
+      position: relative;
+      padding: 0.62rem 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: #8f8a82;
+      text-decoration: none;
+      transform: none;
+      transition: color 0.22s ease;
+    }
+
+    .page-shell > .toc .toc-list a::before {
+      content: counter(toc, decimal-leading-zero);
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--res-chip-bd);
+      transition: color 0.22s ease;
+    }
+
+    .page-shell > .toc .toc-list a::after {
+      content: '';
+      position: absolute;
+      left: -2.06rem;
+      top: 0.58rem;
+      bottom: 0.58rem;
+      width: 3px;
+      background: transparent;
+      transition: background 0.22s ease;
+    }
+
+    .page-shell > .toc .toc-list a:hover,
+    .page-shell > .toc .toc-list a.active {
+      color: var(--res-title);
+      transform: none;
+    }
+
+    .page-shell > .toc .toc-list a:hover::before,
+    .page-shell > .toc .toc-list a.active::before {
+      color: var(--res-tag);
+    }
+
+    .page-shell > .toc .toc-list a:hover::after,
+    .page-shell > .toc .toc-list a.active::after {
+      background: var(--res-tag);
+    }
+
+    
+    .toc-child a{
+      padding-left:1.25rem !important;
+      font-size:0.76rem !important;
+      color:#9b968e !important;
+    }
+
+    .toc-child a::before{
+      content:'•' !important;
+      font-family:'Inter',sans-serif !important;
+      font-weight:400 !important;
+      color:var(--res-chip-bd) !important;
+    }
+
+    .toc-drawer-child a{
+      padding-left:1rem !important;
+      font-size:0.76rem !important;
+      color:#9b968e !important;
+    }
+
+
+    /* ── Hero / Overview / Metrics split ── */
+    .hero-overview-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 1px minmax(200px, 260px);
+      gap: 0;
+      align-items: start;
+      margin-bottom: 6.75rem;
+    }
+
+    .hero-overview-main {
+      padding-right: 2.5rem;
+    }
+
+    .hero-overview-main .hero {
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-overview-divider {
+      background: var(--res-chip-bd);
+      align-self: stretch;
+      width: 1px;
+    }
+
+    .hero-overview-metrics {
+      padding-left: 2.5rem;
+    }
+
+    .metrics-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      font-weight: 900;
+      color: var(--res-title);
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 720px) {
+      .hero-overview-split {
+        grid-template-columns: 1fr;
+      }
+      .hero-overview-main { padding-right: 0; }
+      .hero-overview-divider { display: none; }
+      .hero-overview-metrics { padding-left: 0; padding-top: 2rem; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1040px) {
+      .page-shell > .toc {
+        display: none;
+      }
+
+      .toc-btn {
+        display: flex;
+      }
+
+      .page-shell {
+        display: block;
+        grid-template-columns: 1fr;
+        max-width: calc(860px + 6rem);
+      }
+    }
+
+    @media (max-width: 680px) { .nav-links { display: none; } }
+
+    @media (max-width: 700px) {
+      .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
+    }
+
+    @media (max-width: 640px) {
+      .cards-grid { grid-template-columns: 1fr; }
+      .project-card { min-height: auto; }
+      .role-block { grid-template-columns: 1fr; gap: 0.9rem; }
+      .role-tasks { margin-left: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="projects.html" class="back-btn">Back</a>
+
+  <nav>
+    <a href="index.html" class="logo">Yuki Wang</a>
+    <div class="nav-right">
+      <button class="toc-btn" id="tocBtn" aria-expanded="false" aria-controls="tocDrawer">
+        <div class="toc-btn-lines"><span></span><span></span><span></span></div>
+        Contents
+      </button>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
+  </nav>
+
+  <div class="toc-progress" aria-hidden="true"><div class="toc-progress-fill" id="tocProgressFill"></div></div>
+
+  <!-- Overlay menu -->
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="uxToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="uxSubmenu">
+          <a href="projects-mentalhealth.html">Mental Health Evaluation</a>
+          <a href="projects-cogeffort.html">Cognitive Performance Research</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+
+  <div class="page-shell">
+    <nav class="toc" aria-label="Contents">
+      <p class="toc-label">Content</p>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#problem">Problem</a></li>
+        <li><a href="#role">My role</a></li>
+        <li><a href="#how-it-worked">How it worked</a></li>
+        <li class="toc-child"><a href="projects-mentalhealth-platform.html">UX &amp; Platform Design</a></li>
+        <li class="toc-child"><a href="projects-mentalhealth-analysis.html">Research analysis</a></li>
+      </ul>
+    </nav>
+
+    <main class="page-content">
+      <p class="section-label">Case study</p>
+
+      <div class="hero-overview-split" id="overview">
+        <div class="hero-overview-main">
+          <div class="hero">
+            <span class="hero-eyebrow">Behavioural Research · Mental health · Adolescents · UX</span>
+            <h1>Adolescent Mental Health Evaluation</h1>
+          </div>
+          <div class="section" style="margin-bottom: 0;">
+            <div class="sec-rule-row"><span class="sec-tag">Overview</span><div class="sec-rule"></div></div>
+            <p class="intro">Commissioned by a school board to design a large-scale adolescent mental health evaluation system from scratch — covering everything from the survey students used to the analytical framework that made their responses meaningful.</p>
+          </div>
+        </div>
+        <div class="hero-overview-divider"></div>
+        <div class="hero-overview-metrics">
+          <p class="metrics-heading">Key metrics</p>
+          <ul class="bullet-list">
+            <li>Built 0 to 1</li>
+            <li>5,000+ students evaluated across schools</li>
+            <li>100% independent completion across all age groups</li>
+            <li>0 post-launch redesigns</li>
+            <li>3 days → 1 day screening time</li>
+            <li>First evidence base for identifying at-risk students — and anticipating who might need support next</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 6.75rem;"></div>
+
+      <!-- Problem -->
+      <div class="section" id="problem">
+      <div class="sec-rule-row"><span class="sec-tag">Problem</span><div class="sec-rule"></div></div>
+      <ul class="bullet-list">
+        <li>Schools were reactive — identifying students in crisis rather than understanding the population beforehand</li>
+        <li>No structured way to measure wellbeing at scale or direct limited resources effectively</li>
+        <li>No population-level analysis beyond screening — no visibility into what was actually driving risk</li>
+        <li>Users aged 10–18 vary enormously in reading ability, language comfort, and willingness to disclose</li>
+        <li>Any platform that didn't account for those differences would produce data that couldn't be trusted</li>
+      </ul>
+    </div>
+
+      <!-- My Role -->
+      <div class="section" id="role">
+      <div class="sec-rule-row"><span class="sec-tag">My role</span><div class="sec-rule"></div></div>
+      <p class="role-label">Lead end-to-end platform building and research:</p>
+      <div class="role-blocks">
+        <div class="role-block">
+          <p class="role-heading"><strong>UX Research &amp; Design</strong></p>
+          <ul class="role-tasks">
+            <li>Gathered stakeholder requirements with the school board</li>
+            <li>Designed surveys and digital platforms</li>
+            <li>Conducted iterative usability testing with 10 adolescent participants</li>
+          </ul>
+        </div>
+        <div class="role-block">
+          <p class="role-heading"><strong>Research Analytics</strong></p>
+          <ul class="role-tasks">
+            <li>Developed a screening methodology and generated individual participant reports</li>
+            <li>Built a statistical analysis pipeline in R for school-level reporting and insight</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+      <!-- How It Worked -->
+      <div class="section" id="how-it-worked">
+      <div class="sec-rule-row"><span class="sec-tag">How it worked</span><div class="sec-rule"></div></div>
+      <p class="how-intro">Two parallel workstreams made the platform possible — designing something adolescents could actually use, and building the analytical framework to generate reliable and actionable insights.</p>
+      <div class="cards-grid">
+        <a href="projects-mentalhealth-platform.html" class="project-card card-first">
+          <div>
+            <div class="card-meta">
+              <span class="card-tag">UX &amp; Platform Design</span>
+            </div>
+            <h2 class="card-title">Platform design</h2>
+            <p class="card-body">How the survey was researched, tested, and refined to work across a wide age range.</p>
+          </div>
+          <span class="card-link">More details</span>
+        </a>
+        <a href="projects-mentalhealth-analysis.html" class="project-card">
+          <div>
+            <div class="card-meta">
+              <span class="card-tag">Data &amp; insights</span>
+            </div>
+            <h2 class="card-title">Research analysis</h2>
+            <p class="card-body">How responses were turned into population-level findings and individual student flags.</p>
+          </div>
+          <span class="card-link">More details</span>
+        </a>
+      </div>
+    </div>
+
+    </main>
+  </div>
+
+  <footer>
+    <p>© 2026 Yuki Wang. All rights reserved.</p>
+  </footer>
+
+  <div class="toc-scrim" id="tocScrim"></div>
+  <div class="toc-drawer" id="tocDrawer" aria-hidden="true">
+    <div class="toc-drawer-handle"></div>
+    <p class="toc-drawer-reading">Now reading</p>
+    <ul class="toc-drawer-list" id="tocDrawerList">
+      <li><a href="#overview">Overview<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#problem">Problem<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#role">My role<div class="toc-drawer-dot"></div></a></li>
+      <li><a href="#how-it-worked">How it worked<div class="toc-drawer-dot"></div></a></li>
+      <li class="toc-drawer-child"><a href="projects-mentalhealth-platform.html">UX &amp; Platform Design<div class="toc-drawer-dot"></div></a></li>
+      <li class="toc-drawer-child"><a href="projects-mentalhealth-analysis.html">Research analysis<div class="toc-drawer-dot"></div></a></li>
+    </ul>
+  </div>
+
+  <script>
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const uxToggle    = document.getElementById('uxToggle');
+    const uxSubmenu   = document.getElementById('uxSubmenu');
+
+    if (menuBtn && menuOverlay) {
+      menuBtn.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+        menuOverlay.setAttribute('aria-hidden', String(!isOpen));
+        if (!isOpen && uxSubmenu && uxToggle) {
+          uxSubmenu.classList.remove('open');
+          uxToggle.classList.remove('open');
+          uxToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    if (uxToggle && uxSubmenu) {
+      uxToggle.addEventListener('click', () => {
+        const isOpen = uxSubmenu.classList.toggle('open');
+        uxToggle.classList.toggle('open', isOpen);
+        uxToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+        if (menuOverlay) menuOverlay.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    /* ── Content navigation ── */
+    const tocBtn = document.getElementById('tocBtn');
+    const tocDrawer = document.getElementById('tocDrawer');
+    const tocScrim = document.getElementById('tocScrim');
+    const tocFill = document.getElementById('tocProgressFill');
+
+    if (tocBtn && tocDrawer && tocScrim && tocFill) {
+      const openToc = () => {
+        tocDrawer.classList.add('open');
+        tocScrim.classList.add('open');
+        tocBtn.setAttribute('aria-expanded', 'true');
+        tocDrawer.setAttribute('aria-hidden', 'false');
+      };
+
+      const closeToc = () => {
+        tocDrawer.classList.remove('open');
+        tocScrim.classList.remove('open');
+        tocBtn.setAttribute('aria-expanded', 'false');
+        tocDrawer.setAttribute('aria-hidden', 'true');
+      };
+
+      tocBtn.addEventListener('click', () => tocDrawer.classList.contains('open') ? closeToc() : openToc());
+      tocScrim.addEventListener('click', closeToc);
+      document.querySelectorAll('#tocDrawerList a').forEach(link => link.addEventListener('click', closeToc));
+
+      const tocLinks = document.querySelectorAll('.toc-list a');
+      const drawerLinks = document.querySelectorAll('#tocDrawerList a');
+      const contentSections = Array.from(document.querySelectorAll('main [id]'));
+
+      function updateContentNav() {
+        const doc = document.documentElement;
+        const total = doc.scrollHeight - doc.clientHeight;
+        tocFill.style.width = total > 0 ? (doc.scrollTop / total * 100) + '%' : '0%';
+
+        if (!contentSections.length) return;
+        const trigger = window.scrollY + window.innerHeight * 0.22;
+        let current = contentSections[0];
+        for (const section of contentSections) {
+          if (section.getBoundingClientRect().top + window.scrollY <= trigger) current = section;
+        }
+
+        [...tocLinks, ...drawerLinks].forEach(link => link.classList.remove('active'));
+        document.querySelectorAll(`.toc-list a[href="#${current.id}"], #tocDrawerList a[href="#${current.id}"]`).forEach(link => link.classList.add('active'));
+      }
+
+      window.addEventListener('scroll', updateContentNav, { passive: true });
+      updateContentNav();
+    }
+  </script>
+
+</body>
+</html>

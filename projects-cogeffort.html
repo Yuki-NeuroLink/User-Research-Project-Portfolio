@@ -1,0 +1,739 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multimodal Human Response — Yuki Wang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #f0ede6;
+      --surface:  #ece9e2;
+      --border:   #d8d4ca;
+      --text:     #1a1a1a;
+      --muted:    #6b6860;
+      --accent:   #2596be;
+      --nav-h:    64px;
+      --ux-bg:      #f0f0f0;
+      --ux-top:     #004055;
+      --ux-tag:     #006080;
+      --ux-title:   #004055;
+      --ux-chip-bg: #e6e6e6;
+      --ux-chip-bd: #d0d0d0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Playfair Display', 'Georgia', serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      background: rgba(240, 237, 230, 0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 3rem);
+    }
+
+    nav .logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      font-family: 'Playfair Display', serif;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 2rem; position: relative; z-index: 300; }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+
+    .nav-links a {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.70rem;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+    /* ── Back button ── */
+    .back-btn {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 200;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.74rem;
+      letter-spacing: 0.09em;
+      color: #a3a097;
+      font-style: italic;
+      text-decoration: none;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.2rem;
+      transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeInBtn 0.5s ease 0.6s forwards;
+    }
+
+    .back-btn::before {
+      content: '←';
+      transition: transform 0.2s ease;
+    }
+
+    .back-btn:hover {
+      color: var(--text);
+      font-style: normal;
+      border-color: var(--ux-tag);
+      transform: translateY(-2px);
+    }
+
+    .back-btn:hover::before { transform: translateX(-3px); }
+
+    @keyframes fadeInBtn { to { opacity: 1; pointer-events: auto; } }
+
+    /* ── Page content ── */
+    .page-content {
+      padding: calc(var(--nav-h) + 5rem) clamp(1.5rem, 5vw, 3rem) 7rem;
+      max-width: calc(1120px + 6rem);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .hero {
+      margin-bottom: 6.25rem;
+    }
+
+    .hero-inner {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    .hero-left {
+      flex: 1.3;
+      max-width: 560px;
+    }
+
+    .hero-left h1 {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      font-weight: 900;
+      margin-bottom: 1.1rem;
+    }
+
+    .hero-left h1 em {
+      font-style: italic;
+      color: var(--ux-tag);
+    }
+
+    .hero-left p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.55rem;
+    }
+
+    .hero-left p:last-child { margin-bottom: 0; }
+
+    .hero-divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+
+    .hero-sidebar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-top: 0.25rem;
+    }
+
+    .sidebar-block {
+      padding: 0.9rem 0 0.9rem 1.1rem;
+      border-left: 2px solid var(--border);
+    }
+
+    .sidebar-block + .sidebar-block {
+      margin-top: 0.4rem;
+    }
+
+    .sidebar-measurements {
+      border-left-color: #9eb5bf;
+    }
+
+    .sidebar-role {
+      border-left-color: #c4a898;
+    }
+
+    .sidebar-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-measurements .sidebar-label {
+      color: #6b8f9a;
+    }
+
+    .sidebar-role .sidebar-label {
+      color: #552702;
+    }
+
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-list li {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      color: #4a4744;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 780px) {
+      .hero-inner { flex-direction: column; }
+      .hero-divider { display: none; }
+      .hero-sidebar { flex-direction: row; gap: 1.5rem; }
+    }
+
+    /* ── Cards ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      grid-template-rows: 680px;
+      gap: 2rem;
+      margin: 0 clamp(1rem, 3vw, 2.5rem);
+    }
+
+    .card-hero {
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .card-supporting-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      height: 100%;
+    }
+
+    .card-data-wrap     { flex: 1.35; display: flex; min-height: 0; }
+    .card-hardware-wrap { flex: 1;    display: flex; min-height: 0; }
+
+    .project-card {
+      border: 1px solid transparent;
+      border-left: 4px solid transparent;
+      border-radius: 16px;
+      padding: 1.25rem 1.4rem;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, border-left-color 0.22s ease;
+    }
+
+    .card-hero .project-card {
+      flex: 1;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0, 64, 85, 0.10);
+      filter: brightness(1.06);
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+    }
+
+    .card-title {
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      line-height: 1.18;
+      font-weight: 900;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      max-width: 36ch;
+    }
+
+    .card-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .chip {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.63rem;
+      border: 1px solid;
+      padding: 0.22rem 0.5rem;
+      border-radius: 999px;
+    }
+
+    .card-link {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+      opacity: 0.7;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-link::after {
+      content: '→';
+      transition: transform 0.2s ease;
+    }
+
+    .project-card:hover .card-link::after { transform: translateX(4px); }
+
+    .card-experiment .primary-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.07em;
+      background: #d4eef7;
+      color: #0f6480;
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Card 1: Experiment / MATLAB ── */
+    .card-experiment {
+      background: #f5f5f5;
+      border-color: #1b7898;
+      border-left-color: transparent;
+    }
+    .card-experiment:hover { border-left-color: #1b7898; }
+    .card-experiment .card-title { color: #0f6480; }
+    .card-experiment .card-tag   { color: #2492b7; }
+    .card-experiment .card-desc  { color: #0f6480; }
+    .card-experiment .card-link  { color: #8c8c8c; }
+    .card-experiment .chip {
+      background: #ffffff;
+      border-color: #c4c3be;
+      color: #577985;
+    }
+
+    /* ── Card 2: Hardware ── */
+    .card-hardware {
+      background: #f7f5f0;
+      border-color: #b05a1a;
+      border-left-color: transparent;
+    }
+    .card-hardware:hover { border-left-color: #b05a1a; }
+    .card-hardware .card-title { color: #552702; }
+    .card-hardware .card-tag   { color: #ac5f20; }
+    .card-hardware .card-desc  { color: #552705; }
+    .card-hardware .card-link  { color: #035e7c; }
+    .card-hardware .chip {
+      background: #fff1e5;
+      border-color: #e2bea2;
+      color: #552707;
+    }
+
+    /* ── Card 3: Data ── */
+    .card-data {
+      background: #f9f2eb;
+      border-color: #477a9a;
+      border-left-color: transparent;
+    }
+    .card-data:hover { border-left-color: #477a9a; }
+    .card-data .card-title { color: #004055; }
+    .card-data .card-tag   { color: #11485c; }
+    .card-data .card-desc  { color: #004055; }
+    .card-data .card-link  { color: #848e94; }
+    .card-data .chip {
+      background: #fffcfa;
+      border-color: #a9b4bc;
+      color: #004055;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.8rem clamp(1.5rem, 5vw, 3rem);
+      display: flex;
+      justify-content: center;
+    }
+
+    footer p {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* ── Hamburger ── */
+    .hamburger {
+      display: flex; flex-direction: column; gap: 4.5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger .bar {
+      width: 20px; height: 1.5px; background: var(--text);
+      border-radius: 1px;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+      transform-origin: center;
+    }
+    body.menu-open .hamburger .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    body.menu-open .hamburger .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open .hamburger .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* ── Mobile menu overlay ── */
+    .menu-overlay {
+      position: fixed; inset: 0; background: var(--bg); z-index: 150;
+      display: flex; flex-direction: column;
+      padding: calc(var(--nav-h) + 0.5rem) clamp(1.5rem, 5vw, 3rem) 3rem;
+      opacity: 0; pointer-events: none; transition: opacity 0.28s ease;
+    }
+    body.menu-open .menu-overlay { opacity: 1; pointer-events: all; }
+
+    .overlay-list { list-style: none; margin-top: 0.5rem; }
+    .overlay-list > li { border-bottom: 1px solid var(--border); }
+    .overlay-list > li > a,
+    .overlay-list > li > button {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; padding: 1rem 0;
+      font-family: 'Inter', sans-serif; font-size: 1.0rem;
+      font-weight: 500; letter-spacing: 0.02em; color: var(--text);
+      text-decoration: none; background: none; border: none;
+      cursor: pointer; text-align: left; transition: color 0.2s;
+    }
+    .overlay-list > li > a:hover,
+    .overlay-list > li > button:hover { color: var(--accent); }
+
+    .chevron-icon {
+      width: 8px; height: 8px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease; flex-shrink: 0;
+    }
+    .work-toggle.open .chevron-icon { transform: rotate(-135deg); }
+
+    .submenu { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu.open { max-height: 380px; }
+
+    .submenu-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      width: calc(100% - 0.3rem); padding: 0.45rem 1rem 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; color: var(--muted);
+      background: none; border: none; border-left: 2px solid var(--border);
+      margin-left: 0.3rem; cursor: pointer; text-align: left;
+      transition: color 0.2s, border-color 0.2s; box-sizing: border-box;
+    }
+    .submenu-toggle:hover { color: var(--text); border-color: var(--accent); }
+    .submenu-toggle.open  { color: var(--text); border-color: var(--accent); }
+
+    .chevron-sm {
+      width: 6px; height: 6px;
+      border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+      transform: rotate(45deg); transition: transform 0.25s ease;
+      flex-shrink: 0; margin-right: 0.1rem;
+    }
+    .submenu-toggle.open .chevron-sm { transform: rotate(-135deg); }
+
+    .submenu2 { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .submenu2.open { max-height: 120px; }
+    .submenu2 a {
+      display: block; padding: 0.38rem 0 0.38rem 2rem;
+      font-family: 'Inter', sans-serif; font-size: 0.76rem; color: var(--muted);
+      text-decoration: none; border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu2 a:last-child { margin-bottom: 0.5rem; }
+    .submenu2 a:hover { color: var(--text); border-color: var(--accent); }
+
+    .submenu a {
+      display: block; padding: 0.45rem 0 0.45rem 1rem;
+      font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      color: var(--muted); text-decoration: none;
+      border-left: 2px solid var(--border); margin-left: 0.3rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .submenu a:last-child { margin-bottom: 0.75rem; }
+    .submenu a:hover { color: var(--text); border-color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 1.25rem; margin: 0; }
+      .card-hero { height: auto; }
+      .card-supporting-stack { gap: 1.25rem; height: auto; }
+      .card-data-wrap, .card-hardware-wrap { flex: none; }
+      .card-supporting-stack .project-card { min-height: 220px; }
+      .card-hero .project-card { justify-content: flex-start; gap: 1.25rem; }
+    }
+    @media (max-width: 680px) { .nav-links { display: none; } }
+    @media (max-width: 700px) {
+      .back-btn { bottom: 1.2rem; left: 1.2rem; font-size: 0.70rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="projects.html" class="back-btn">Back</a>
+
+  <nav>
+    <a href="index.html" class="logo">Yuki Wang</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <button class="hamburger" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </button>
+    </div>
+  </nav>
+
+  <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+    <ul class="overlay-list">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li>
+        <button class="work-toggle" id="uxToggle" aria-expanded="false">
+          Projects <div class="chevron-icon"></div>
+        </button>
+        <div class="submenu" id="uxSubmenu">
+          <a href="projects-mentalhealth.html">Mental Health Evaluation</a>
+          <a href="projects-cogeffort.html">Cognitive Performance Research</a>
+        </div>
+      </li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </div>
+
+
+  <div class="page-content">
+    <p class="section-label">Deep research</p>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <h1>Studying Human Responses Across <em>Cognitive Tasks</em></h1>
+          <p>How do people respond to different tasks, environments, and demands?</p>
+          <p>To make that possible, I designed and built the complete research infrastructure.</p>
+          <p>The experiment software, a custom EEG hardware solution, and the data pipelines that brought every signal together into one coherent dataset.</p>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-sidebar">
+          <div class="sidebar-block sidebar-measurements">
+            <span class="sidebar-label">Measurements</span>
+            <ul class="sidebar-list">
+              <li>Brain activity (EEG)</li>
+              <li>Heart activity (ECG)</li>
+              <li>Breathing patterns</li>
+              <li>Skin conductance</li>
+              <li>Eye responses</li>
+              <li>Behavioural measurements</li>
+            </ul>
+          </div>
+          <div class="sidebar-block sidebar-role">
+            <span class="sidebar-label">My Role</span>
+            <ul class="sidebar-list">
+              <li>Experiment System Design</li>
+              <li>Hardware Development</li>
+              <li>Research Analysis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards-grid">
+
+      <div class="card-hero">
+        <a href="projects-cogeffort-Matlab.html" class="project-card card-experiment">
+          <div class="card-top">
+            <span class="primary-badge">Primary</span>
+            <div class="card-meta">
+              <span class="card-tag">UX + system design</span>
+            </div>
+            <h2 class="card-title">Software • MatLab app design</h2>
+            <p class="card-desc">Custom MATLAB app managing participant workflows, task delivery, and real-time data capture across multiple devices.</p>
+          </div>
+          <div class="card-bottom">
+            <div class="card-details">
+              <span class="chip">MATLAB</span>
+              <span class="chip">App design</span>
+              <span class="chip">Journey mapping</span>
+              <span class="chip">System design</span>
+            </div>
+            <span class="card-link">Details</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="card-supporting-stack">
+
+        <div class="card-data-wrap">
+          <a href="projects-cogeffort-data.html" class="project-card card-data">
+            <div class="card-top">
+              <div class="card-meta">
+                <span class="card-tag">Data engineering</span>
+              </div>
+              <h2 class="card-title">Data processing</h2>
+              <p class="card-desc">Pipelines to clean, synchronise, and analyse high-volume sensor data from multiple sources with different formats and sampling rates.</p>
+            </div>
+            <div class="card-bottom">
+              <div class="card-details">
+                <span class="chip">Signal processing</span>
+                <span class="chip">Analysis</span>
+                <span class="chip">Visualisation</span>
+                <span class="chip">Data cleaning</span>
+              </div>
+              <span class="card-link">Details</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="card-hardware-wrap">
+          <a href="projects-cogeffort-EEGcap.html" class="project-card card-hardware">
+            <div class="card-top">
+              <div class="card-meta">
+                <span class="card-tag">Hardware design</span>
+              </div>
+              <h2 class="card-title">Hardware • EEG cap design</h2>
+              <p class="card-desc">Bespoke EEG cap designed and integrated alongside other physiological sensors into the wider research platform.</p>
+            </div>
+            <div class="card-bottom">
+              <div class="card-details">
+                <span class="chip">EEG</span>
+                <span class="chip">Sensor integration</span>
+                <span class="chip">Hardware</span>
+                <span class="chip">Usability testing</span>
+              </div>
+              <span class="card-link">Details</span>
+            </div>
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2026 Yuki Wang. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const menuBtn     = document.getElementById('menuBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const uxToggle    = document.getElementById('uxToggle');
+    const uxSubmenu   = document.getElementById('uxSubmenu');
+
+    if (menuBtn && menuOverlay) {
+      menuBtn.addEventListener('click', () => {
+        const isOpen = document.body.classList.toggle('menu-open');
+        menuBtn.setAttribute('aria-expanded', String(isOpen));
+        menuOverlay.setAttribute('aria-hidden', String(!isOpen));
+        if (!isOpen && uxSubmenu && uxToggle) {
+          uxSubmenu.classList.remove('open');
+          uxToggle.classList.remove('open');
+          uxToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    if (uxToggle && uxSubmenu) {
+      uxToggle.addEventListener('click', () => {
+        const isOpen = uxSubmenu.classList.toggle('open');
+        uxToggle.classList.toggle('open', isOpen);
+        uxToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+    }
+
+    document.querySelectorAll('.menu-overlay a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+        if (menuOverlay) menuOverlay.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
